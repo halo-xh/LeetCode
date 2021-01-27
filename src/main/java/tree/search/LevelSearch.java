@@ -2,8 +2,7 @@ package tree.search;
 
 import tree.Node;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * @author xiaohong
@@ -31,7 +30,6 @@ public class LevelSearch {
             }
         }
     }
-
 
 
     // 利用 层序遍历 计算树的高度
@@ -118,5 +116,85 @@ public class LevelSearch {
         return true;
     }
 
+    /**
+     * https://leetcode-cn.com/problems/binary-tree-level-order-traversal/
+     * 中序遍历 数组打印
+     */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root == null) {
+            return Collections.EMPTY_LIST;
+        }
+        List<List<Integer>> res = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int levelSize = 1;
+        List<Integer> levelList = new ArrayList<>();
+        while (!queue.isEmpty()) {
+            TreeNode ee = queue.poll();
+            levelSize--;
+            levelList.add(ee.val);
+            if (ee.left != null) {
+                queue.offer(ee.left);
+            }
+            if (ee.right != null) {
+                queue.offer(ee.right);
+            }
+            if (levelSize == 0){
+                res.add(new ArrayList<>(levelList));
+                levelList.clear();
+                levelSize = queue.size();
+            }
+        }
+        return res;
+    }
+
+    /**
+     * https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/
+     * 104. 二叉树的最大深度
+     */
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        int height = 0;
+        int levelSize = 1;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()) {
+            TreeNode ee = queue.poll();
+            System.out.println(ee.val);
+            levelSize--;
+            if (ee.left != null) {
+                queue.offer(ee.left);
+            }
+            if (ee.right != null) {
+                queue.offer(ee.right);
+            }
+            if (levelSize == 0) {
+                levelSize = queue.size();
+                height++;
+            }
+        }
+        return height;
+    }
+
+    public static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode() {
+        }
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
 
 }
