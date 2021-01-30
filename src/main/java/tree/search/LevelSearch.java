@@ -1,7 +1,10 @@
 package tree.search;
 
+import tree.GenerateTrees;
 import tree.Node;
+import tree.TreeNode;
 
+import javax.print.DocFlavor;
 import java.util.*;
 
 /**
@@ -178,23 +181,77 @@ public class LevelSearch {
         return height;
     }
 
-    public static class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode() {
+    /**
+     * 107. 二叉树的层序遍历 II
+     * https://leetcode-cn.com/problems/binary-tree-level-order-traversal-ii/
+     * 给定一个二叉树，返回其节点值自底向上的层序遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+     */
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        if (root==null){
+            return Collections.emptyList();
         }
-
-        TreeNode(int val) {
-            this.val = val;
+        LinkedList<List<Integer>> res = new LinkedList<>();
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        int levelSize = 1;
+        queue.offer(root);
+        List<Integer> levelVal = new ArrayList<>();
+        while (!queue.isEmpty()){
+            TreeNode poll = queue.poll();
+            levelVal.add(poll.val);
+            levelSize--;
+            if (poll.left!=null){
+                queue.offer(poll.left);
+            }
+            if (poll.right!=null){
+                queue.offer(poll.right);
+            }
+            if (levelSize==0){
+                res.push(new ArrayList<>(levelVal));
+                levelVal.clear();
+                levelSize =  queue.size();
+            }
         }
+        return res;
+    }
 
-        TreeNode(int val, TreeNode left, TreeNode right) {
-            this.val = val;
-            this.left = left;
-            this.right = right;
+    /**
+     * 103. 二叉树的锯齿形层序遍历
+     * https://leetcode-cn.com/problems/binary-tree-zigzag-level-order-traversal/
+     * 给定一个二叉树，返回其节点值的锯齿形层序遍历。（即先从左往右，再从右往左进行下一层遍历，以此类推，层与层之间交替进行）
+     *
+     */
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        if (root ==null){
+            return Collections.emptyList();
         }
+        List<List<Integer>> res = new ArrayList<>();
+        LinkedList<TreeNode> linkedList = new LinkedList<>();
+        LinkedList<Integer> queue = new LinkedList<>();
+        linkedList.offer(root);
+        int levelSize = 1;
+        boolean order  =true;
+        while (!linkedList.isEmpty()){
+            TreeNode node = linkedList.poll();
+            levelSize--;
+            if (order){
+                queue.addLast(node.val);
+            }else {
+                queue.addFirst(node.val);
+            }
+            if (node.left!=null){
+                linkedList.offer(node.left);
+            }
+            if (node.right!=null){
+                linkedList.offer(node.right);
+            }
+            if (levelSize == 0){
+                levelSize = linkedList.size();
+                res.add(new ArrayList<>(queue));
+                queue.clear();
+                order = !order;
+            }
+        }
+        return res;
     }
 
 }
