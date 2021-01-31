@@ -62,62 +62,6 @@ public class LevelSearch {
         return height;
     }
 
-    // 利用 层序遍历 判断一棵树是否为完全二叉树
-    public boolean isComplete(Node e) {
-        if (e == null) {
-            return false;
-        }
-        boolean isleaf = false; // 是叶子节点
-        Queue queue = new LinkedList();
-        queue.offer(e);
-        while (!queue.isEmpty()) {
-            Node ee = (Node) queue.poll();
-            if (isleaf && (ee.right != null || ee.left != null)) {// 如果要求是叶子节点 但是却不是（左右节点有值
-                return false;
-            }
-            if (ee.left != null && ee.right != null) {
-                queue.offer(ee.left);
-                queue.offer(ee.right);
-            } else if (ee.left == null && ee.right != null) {
-                return false;
-            } else { // 接下来所有节点都必须是叶子节点
-                isleaf = true;
-                if (ee.left != null) {
-                    queue.offer(ee.left);
-                }
-            }
-        }
-        return true;
-    }
-
-    // 利用 层序遍历 判断一棵树是否为完全二叉树
-    public boolean isComplete2(Node e) {
-        if (e == null) {
-            return false;
-        }
-        boolean isleaf = false; // 是叶子节点
-        Queue queue = new LinkedList();
-        queue.offer(e);
-        while (!queue.isEmpty()) {
-            Node ee = (Node) queue.poll();
-            if (isleaf && (ee.right != null || ee.left != null)) {// 如果要求是叶子节点 但是却不是（左右节点有只=值
-                return false;
-            }
-            if (ee.left != null) {
-                queue.offer(ee.left);
-            } else {
-                if (ee.right != null) {
-                    return false;
-                }
-            }
-            if (ee.right != null) {
-                queue.offer(ee.right);
-            } else {
-                isleaf = true;
-            }
-        }
-        return true;
-    }
 
     /**
      * https://leetcode-cn.com/problems/binary-tree-level-order-traversal/
