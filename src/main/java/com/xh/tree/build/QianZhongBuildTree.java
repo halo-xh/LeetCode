@@ -1,6 +1,5 @@
-package com.xh.jianzhioffer;
+package com.xh.tree.build;
 
-import com.xh.tree.Node;
 import com.xh.tree.TreeNode;
 
 import java.util.HashMap;
@@ -12,7 +11,7 @@ import java.util.Stack;
  * @date 2021/1/30 10:25
  * @description
  */
-public class BuildTree {
+public class QianZhongBuildTree {
 
     /**
      * https://leetcode-cn.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/
