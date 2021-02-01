@@ -8,9 +8,6 @@
     <artifactId>shujujiegou</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
 
 
 </project>

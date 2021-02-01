@@ -14,7 +14,7 @@ package com.xh.jianzhioffer;
  * <p>
  * sss {@link com.xh.dp.PaLouTi}
  */
-public class fib {
+public class Fibonacci {
 
     public static int fib(int n) {
         if (n == 0) {

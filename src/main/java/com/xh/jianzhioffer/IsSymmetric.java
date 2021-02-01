@@ -1,10 +1,14 @@
-package com.xh.tree;
+package com.xh.jianzhioffer;
+
+import com.xh.tree.TreeNode;
 
 /**
  * @author xiaohong
  * @version 1.0
  * @date 2021/1/29 13:04
  * @description https://leetcode-cn.com/problems/symmetric-com.xh.tree/
+ * <p>
+ * https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/
  */
 public class IsSymmetric {
 
@@ -20,7 +24,7 @@ public class IsSymmetric {
 //            if (l.val != r.val){
 //                return false;
 //            }
-            return l.val != r.val && isSymmetricss(l.left, r.right) && isSymmetricss(l.right, r.left);
+            return l.val == r.val && isSymmetricss(l.left, r.right) && isSymmetricss(l.right, r.left);
         }
         return l == r;
     }

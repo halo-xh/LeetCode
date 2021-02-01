@@ -12,9 +12,50 @@ import java.util.Stack;
  */
 public class MirrorTree {
 
+
+    /**
+     * 递归
+     */
     public TreeNode mirrorTree(TreeNode root) {
-        TreeNode newRoot = new TreeNode(root.val);
-        return newRoot;
+//        TreeNode tmp = root.left;
+//        root.left = root.right;
+//        root.right = tmp;
+//        mirrorTree(root.left);
+//        mirrorTree(root.right);
+//        return root;
+
+        if (root == null) {
+            return null;
+        }
+        TreeNode leftRoot = mirrorTree(root.right);
+        TreeNode rightRoot = mirrorTree(root.left);
+        root.left = leftRoot;
+        root.right = rightRoot;
+        return root;
+    }
+
+    /**
+     * 循环
+     */
+    public TreeNode mirrorTree2(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            TreeNode pop = stack.pop();
+            if (pop.left != null) {
+                stack.push(pop.left);
+            }
+            if (pop.right != null) {
+                stack.push(pop.right);
+            }
+            TreeNode tmp = pop.left;
+            pop.left = pop.right;
+            pop.right = tmp;
+        }
+        return root;
     }
 
 }
