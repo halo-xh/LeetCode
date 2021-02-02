@@ -9,7 +9,8 @@ import java.util.Queue;
  * @author xiaohong
  * @version 1.0
  * @date 2021/2/2 9:49
- * @description 输入一棵二叉树的根节点，判断该树是不是平衡二叉树。如果某二叉树中任意节点的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。
+ * @description 输入一棵二叉树的根节点，判断该树是不是平衡二叉树。
+ * 如果某二叉树中**任意节点**的左右子树的深度相差不超过1，那么它就是一棵平衡二叉树。
  * <p>
  * 示例 1:
  * <p>
@@ -26,16 +27,19 @@ public class IsBalanced {
 
 
     public boolean isBalanced(TreeNode root) {
-        if (root==null){
+        if (root == null) {
             return true;
         }
-        return balanced(root.left,root.right);
+        return balanced(root.left, root.right);
     }
 
     public boolean balanced(TreeNode left, TreeNode right) {
-        int lh = getDepth(left);
-        int rh = getDepth(right);
-        return lh > rh ? lh - rh < 2 : rh - lh < 2;
+        int lh = rootHeight(left);
+        int rh = rootHeight(right);
+        if (Math.abs(lh - rh)>1){
+            return false;
+        }
+        return balanced(left.left,left.right) && balanced(right.left,right.left);
     }
 
     public int rootHeight(TreeNode root) {
@@ -65,7 +69,7 @@ public class IsBalanced {
 
     //获取以node为根的子树深度
     public int getDepth(TreeNode node) {
-        if(node == null){
+        if (node == null) {
             return 0;
         }
         int l = getDepth(node.left) + 1;
@@ -78,21 +82,20 @@ public class IsBalanced {
         return (recur(root) != -1);
     }
 
-    public int recur(TreeNode root)
-    {
-        if(root == null) {
+    public int recur(TreeNode root) {
+        if (root == null) {
             return 0;
         }
         int left = recur(root.left);
-        if(left == -1) {
+        if (left == -1) {
             return -1;
         }
         int right = recur(root.right);
-        if(right == -1) {
+        if (right == -1) {
             return -1;
         }
-        if(Math.abs(left-right) < 2) {
-            return Math.max(left,right)+1;
+        if (Math.abs(left - right) < 2) {
+            return Math.max(left, right) + 1;
         } else {
             return -1; //超过平衡值了
         }
