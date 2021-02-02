@@ -85,15 +85,15 @@ public class IsComplete {
     }
 
     // 利用 层序遍历 判断一棵树是否为完全二叉树
-    public boolean isComplete2(Node e) {
+    public boolean isComplete2(TreeNode e) {
         if (e == null) {
             return false;
         }
         boolean isleaf = false; // 是叶子节点
-        Queue queue = new LinkedList();
+        Queue<TreeNode> queue = new LinkedList<>();
         queue.offer(e);
         while (!queue.isEmpty()) {
-            Node ee = (Node) queue.poll();
+            TreeNode ee = queue.poll();
             if (isleaf && (ee.right != null || ee.left != null)) {// 如果要求是叶子节点 但是却不是（左右节点有只=值
                 return false;
             }
