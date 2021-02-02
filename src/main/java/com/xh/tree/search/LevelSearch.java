@@ -18,6 +18,7 @@ public class LevelSearch {
         if (e == null) {
             return;
         }
+        // 层序遍历， 用队列，先进先出
         Queue<Node> queue = new LinkedList<Node>();
         queue.offer(e);
         while (!queue.isEmpty()) {
