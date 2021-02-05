@@ -34,7 +34,7 @@ public class ShuziQuanpai {
     }
 
     /**
-     * 简单 全部回溯
+     * 简单法全部回溯
      */
     public void dfs(int[] nums, List<Integer> ans, List<List<Integer>> res) {
         if (ans.size() == nums.length) {
