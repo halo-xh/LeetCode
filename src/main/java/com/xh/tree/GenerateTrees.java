@@ -1,6 +1,8 @@
 package com.xh.tree;
 
 
+import com.xh.common.ListNode;
+
 import java.util.List;
 
 /**
@@ -62,28 +64,10 @@ public class GenerateTrees {
     private ListNode getMid(ListNode left, ListNode right) {
         ListNode slow = left;
         ListNode fast = left;
-        while (fast != right && fast.next!=null) {  //走2步  fast.next!=null
+        while (fast != right && fast.next != null) {  //走2步  fast.next!=null
             slow = slow.next;
             fast = fast.next.next;
         }
         return slow;
     }
-
-    public static class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode() {
-        }
-
-        ListNode(int val) {
-            this.val = val;
-        }
-
-        ListNode(int val, ListNode next) {
-            this.val = val;
-            this.next = next;
-        }
-    }
-
 }
