@@ -1,6 +1,5 @@
 package com.xh.tree.search;
 
-import com.xh.tree.Node;
 import com.xh.tree.TreeNode;
 
 import java.util.ArrayList;
@@ -41,7 +40,6 @@ public class FirstSearch {
         TreeNode node = root;
         while (!stack.isEmpty() || node != null) {
             while (node != null) {
-                System.out.println(node);
                 list.add(node.val);
                 stack.push(node);
                 node = node.left;

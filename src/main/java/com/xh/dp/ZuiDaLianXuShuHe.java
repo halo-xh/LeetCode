@@ -35,5 +35,24 @@ public class ZuiDaLianXuShuHe {
         return max;
     }
 
+    /**
+     *
+     * dp[i]代表着以nums[i]为结尾的最大子序和
+     * 例如： 3 -1 3 dp[2] 为 2 而不是3, 因为先保证连续。
+     *    最后的结果是dp 中的最大值。
+     */
+    public int maxSubArray(int[] nums) {
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i-1]+nums[i],nums[i]);
+        }
+
+
+
+
+        return -1;
+    }
+
 
 }

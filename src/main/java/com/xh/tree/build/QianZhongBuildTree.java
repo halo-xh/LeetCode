@@ -49,7 +49,7 @@ public class QianZhongBuildTree {
         }
         TreeNode root = new TreeNode(preorder[pre_root]);//获取root节点
         int idx = map.get(preorder[pre_root]);//获取在中序遍历中根节点所在索引，以方便获取左子树的数量
-        //左子树的根的索引为先序中的根节点+1
+        //左子树的根的索引为先序 中的根节点+1
         //递归左子树的左边界为原来的中序in_left
         //递归右子树的右边界为中序中的根节点索引-1
         root.left = recur(pre_root + 1, in_left, idx - 1);
