@@ -7,7 +7,7 @@ import com.xh.tree.TreeNode;
  * @author xiaohong
  * @version 1.0
  * @date 2021/2/1 16:59
- * @description https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/
+ * https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/
  * <p>
  * 输入两棵二叉树A和B，判断B是不是A的子结构。(约定空树不是任意一个树的子结构)
  * <p>
