@@ -11,21 +11,27 @@ import com.xh.common.ListNode;
 public class AddTwoNumbers {
 
     public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
-        ListNode head = null;
+        ListNode head = new ListNode();
+        ListNode current = head;
         boolean add = false;
         while (l1 != null || l2 != null) {
-            int val = l1 != null && l2 != null ? l1.val + l2.val : l1 != null && l2 == null ? l1.val : l2.val;
+            int val = l1 != null && l2 != null ? l1.val + l2.val : l1 != null ? l1.val : l2.val;
             int nval = add ? val + 1 : val;
-            if (val > 9) {
-                nval = val % 10;
+            add = false;
+            if (nval > 9) {
+                nval = nval % 10;
                 add = true;
             }
-            head = new ListNode(nval);
-            head = head.next;
+            current.next = new ListNode(nval);
+            current = current.next;
             l1 = l1 != null ? l1.next : null;
             l2 = l2 != null ? l2.next : null;
         }
-        return head;
+        // 最后进一位
+        if (add) {
+            current.next = new ListNode(1);
+        }
+        return head.next;
 
     }
 }
