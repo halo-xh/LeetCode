@@ -1,7 +1,6 @@
 package com.xh.concurrent;
 
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntConsumer;
 
 /**
@@ -16,9 +15,10 @@ import java.util.function.IntConsumer;
  */
 public class FizzBuzz {
     private int n;
-
-    private volatile int type = 1;
-    private volatile AtomicInteger cu = new AtomicInteger(1);
+    Semaphore s3 = new Semaphore(0);
+    Semaphore s5 = new Semaphore(0);
+    Semaphore s15 = new Semaphore(0);
+    Semaphore s = new Semaphore(1);
 
     public FizzBuzz(int n) {
         this.n = n;
@@ -26,46 +26,84 @@ public class FizzBuzz {
 
     // printFizz.run() outputs "fizz".
     public void fizz(Runnable printFizz) throws InterruptedException {
-        while (type == 3) {
-            printFizz.run();
-            type = 1;
-            cu.incrementAndGet();
+        for (int i = 1; i <= n; i++) {
+            if (i % 3 == 0 && i % 5 != 0) {
+                s3.acquire();
+                printFizz.run();
+                s.release();
+            }
         }
     }
 
     // printBuzz.run() outputs "buzz".
     public void buzz(Runnable printBuzz) throws InterruptedException {
-        while (type == 5) {
-            printBuzz.run();
-            type = 1;
-            cu.incrementAndGet();
-
+        for (int i = 1; i <= n; i++) {
+            if (i % 5 == 0 && i % 3 != 0) {
+                s5.acquire();
+                printBuzz.run();
+                s.release();
+            }
         }
     }
 
     // printFizzBuzz.run() outputs "fizzbuzz".
     public void fizzbuzz(Runnable printFizzBuzz) throws InterruptedException {
-        while (type == 15) {
-            printFizzBuzz.run();
-            type = 1;
-            cu.incrementAndGet();
+        for (int i = 1; i <= n; i++) {
+            if (i % 3 == 0 && i % 5 == 0) {
+                s15.acquire();
+                printFizzBuzz.run();
+                s.release();
+            }
         }
     }
 
     // printNumber.accept(x) outputs "x", where x is an integer.
     public void number(IntConsumer printNumber) throws InterruptedException {
-        while (cu.get() <= n) {
-            if (cu.get() % 3 == 0 && cu.get() % 5 == 0) {
-                type = 15;
-            } else if (cu.get() % 5 == 0) {
-                type = 5;
-            } else if (cu.get() % 3 == 0) {
-                type = 3;
-            } else if (type == 1) {
-                printNumber.accept(cu.get());
-                cu.incrementAndGet();
+        for (int i = 1; i <= n; i++) {
+            s.acquire();
+            if (i % 3 == 0 && i % 5 == 0) {
+                s15.release();
+            } else if (i % 3 == 0) {
+                s3.release();
+            } else if (i % 5 == 0) {
+                s5.release();
+            } else {
+                printNumber.accept(i);
+                s.release();
             }
         }
+    }
+
+    public static void main(String[] args) {
+        FizzBuzz fizzBuzz = new FizzBuzz(15);
+        new Thread(()-> {
+            try {
+                fizzBuzz.fizz(()-> System.out.print(",fizz"));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        new Thread(()-> {
+            try {
+                fizzBuzz.buzz(()-> System.out.print(",buzz"));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        new Thread(()-> {
+            try {
+                fizzBuzz.fizzbuzz(()-> System.out.print(",fizzbuzz"));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        new Thread(()-> {
+            try {
+                fizzBuzz.number(System.out::print);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
 }
