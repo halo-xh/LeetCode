@@ -6,6 +6,11 @@ import java.util.concurrent.Semaphore;
  * https://leetcode-cn.com/problems/print-foobar-alternately/
  */
 public class FooBar {
+
+    public static void main(String[] args) {
+
+    }
+
     private int n;
 
     Semaphore semaphoref = new Semaphore(1);

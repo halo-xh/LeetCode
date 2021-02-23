@@ -1,21 +1,24 @@
 package com.xh.concurrent;
 
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntConsumer;
 
 /**
- * @author xiaohong
- * @version 1.0
- * @date 2021/2/22 16:30
- * @description
+ * https://leetcode-cn.com/problems/fizz-buzz-multithreaded/
+ * 编写一个可以从 1 到 n 输出代表这个数字的字符串的程序，但是：
+ * <p>
+ * 如果这个数字可以被 3 整除，输出 "fizz"。
+ * 如果这个数字可以被 5 整除，输出 "buzz"。
+ * 如果这个数字可以同时被 3 和 5 整除，输出 "fizzbuzz"。
+ * ----------------------------
+ * 四条线程，每次只有一条线程在打印。
  */
 public class FizzBuzz {
     private int n;
 
-    Semaphore semaphore3 = new Semaphore(0);
-    Semaphore semaphore5 = new Semaphore(0);
-    Semaphore semaphore35 = new Semaphore(0);
-    Semaphore semaphore = new Semaphore(1);
+    private volatile int type = 1;
+    private volatile AtomicInteger cu = new AtomicInteger(1);
 
     public FizzBuzz(int n) {
         this.n = n;
@@ -23,45 +26,44 @@ public class FizzBuzz {
 
     // printFizz.run() outputs "fizz".
     public void fizz(Runnable printFizz) throws InterruptedException {
-        for (int i = 3; i <= n && i % 5 != 0; i += 3) {
-            semaphore3.acquire();
+        while (type == 3) {
             printFizz.run();
-            semaphore.release();
+            type = 1;
+            cu.incrementAndGet();
         }
     }
 
     // printBuzz.run() outputs "buzz".
     public void buzz(Runnable printBuzz) throws InterruptedException {
-        for (int i = 5; i <= n && i % 3 != 0; i += 5) {
-            semaphore5.acquire();
+        while (type == 5) {
             printBuzz.run();
-            semaphore.release();
+            type = 1;
+            cu.incrementAndGet();
+
         }
     }
 
     // printFizzBuzz.run() outputs "fizzbuzz".
     public void fizzbuzz(Runnable printFizzBuzz) throws InterruptedException {
-        for (int i = 1; i <= n; i += 15) {
-            semaphore35.acquire();
+        while (type == 15) {
             printFizzBuzz.run();
-            semaphore.release();
+            type = 1;
+            cu.incrementAndGet();
         }
-
     }
 
     // printNumber.accept(x) outputs "x", where x is an integer.
     public void number(IntConsumer printNumber) throws InterruptedException {
-        for (int i = 1; i <= n; i++) {
-            semaphore.acquire();
-            if (n % 3 == 0 && n % 5 == 0) {
-                semaphore35.release();
-            } else if (n % 5 == 0) {
-                semaphore5.release();
-            } else if (n % 3 == 0) {
-                semaphore3.release();
-            } else {
-                printNumber.accept(i);
-                semaphore.release();
+        while (cu.get() <= n) {
+            if (cu.get() % 3 == 0 && cu.get() % 5 == 0) {
+                type = 15;
+            } else if (cu.get() % 5 == 0) {
+                type = 5;
+            } else if (cu.get() % 3 == 0) {
+                type = 3;
+            } else if (type == 1) {
+                printNumber.accept(cu.get());
+                cu.incrementAndGet();
             }
         }
     }
