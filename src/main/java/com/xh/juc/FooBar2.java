@@ -1,6 +1,5 @@
-package com.xh.concurrent;
+package com.xh.juc;
 
-import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 

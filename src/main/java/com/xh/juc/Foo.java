@@ -1,4 +1,4 @@
-package com.xh.concurrent;
+package com.xh.juc;
 
 /**
  * https://leetcode-cn.com/problems/print-in-order/

@@ -1,4 +1,4 @@
-package com.xh.concurrent;
+package com.xh.juc;
 
 import java.util.concurrent.Semaphore;
 import java.util.function.IntConsumer;

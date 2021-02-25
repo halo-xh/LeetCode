@@ -1,4 +1,4 @@
-package com.xh.concurrent;
+package com.xh.juc;
 
 /**
  * @author xiaohong

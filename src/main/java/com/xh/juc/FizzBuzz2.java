@@ -1,4 +1,4 @@
-package com.xh.concurrent;
+package com.xh.juc;
 
 import java.util.function.IntConsumer;
 import java.util.function.IntPredicate;
