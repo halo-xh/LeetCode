@@ -1,13 +1,12 @@
-package com.xh;
+package com.xh.others.matrix;
 
-
-import java.util.Arrays;
 
 /**
  * @author xiaohong
  * @version 1.0
  * @date 2021/2/24 17:44
- * @description
+ * <p>
+ * https://leetcode-cn.com/problems/flipping-an-image/
  */
 public class FlipAndInvertImage {
 
