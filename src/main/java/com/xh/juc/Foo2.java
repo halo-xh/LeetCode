@@ -12,6 +12,8 @@ import java.util.concurrent.locks.ReentrantLock;
  * 一个将会调用 second() 方法
  * 还有一个将会调用 third() 方法
  * 请设计修改程序，以确保 second() 方法在 first() 方法之后被执行，third() 方法在 second() 方法之后被执行。
+ *
+ * 有问题这个
  */
 public class Foo2 {
 
@@ -62,7 +64,7 @@ public class Foo2 {
         Foo2 foo2 = new Foo2();
         new Thread(()-> {
             try {
-                foo2.first(()-> System.out.println("1"));
+                foo2.third(()-> System.out.println("3"));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -76,7 +78,7 @@ public class Foo2 {
         }).start();
         new Thread(()-> {
             try {
-                foo2.third(()-> System.out.println("3"));
+                foo2.first(()-> System.out.println("1"));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

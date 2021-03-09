@@ -7,8 +7,23 @@ import java.util.concurrent.Semaphore;
  */
 public class FooBar {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        FooBar fooBar = new FooBar(5);
+        new Thread(()->{
+            try {
+                fooBar.foo(()->System.out.println("foo"));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
 
+        new Thread(()->{
+            try {
+                fooBar.bar(()->System.out.println("bar"));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private int n;
