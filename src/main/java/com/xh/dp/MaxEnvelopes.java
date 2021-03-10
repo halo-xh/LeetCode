@@ -10,7 +10,9 @@ package com.xh.dp;
 public class MaxEnvelopes {
 
     public int maxEnvelopes(int[][] envelopes) {
+        for (int i = 0; i < envelopes[0].length; i++) {
 
+        }
 
 
         return 0;
