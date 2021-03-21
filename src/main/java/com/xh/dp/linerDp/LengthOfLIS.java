@@ -16,14 +16,25 @@ import java.util.Arrays;
 
 public class LengthOfLIS {
 
+    public static void main(String[] args) {
+        LengthOfLIS lengthOfLIS = new LengthOfLIS();
+        System.out.println(lengthOfLIS.lengthOfLIS(new int[]{10, 9, 2, 5, 3, 7, 101, 18}));
+    }
+
     public int lengthOfLIS(int[] nums) {
         int[] res = new int[nums.length];
         Arrays.fill(res, 1);
         for (int i = 0; i < nums.length; i++) {
             for (int j = 0; j < i; j++) {
-
+                if (nums[j] < nums[i]) {
+                    res[i] = Math.max(res[i], res[j] + 1);
+                }
             }
         }
-        return 0;
+        int r = 0;
+        for (int re : res) {
+            r = Math.max(re, r);
+        }
+        return r;
     }
 }
