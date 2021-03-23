@@ -1,6 +1,5 @@
 package com.xh.others;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -22,38 +21,41 @@ import java.util.List;
  * public List<NestedInteger> getList();
  * }
  */
+
+/**
+ * todo. 超时
+ * https://leetcode-cn.com/problems/flatten-nested-list-iterator/
+ */
 public class NestedIterator implements Iterator<Integer> {
 
-    private List<NestedInteger> nestedList;
-
-    private int index = 0;
-
-    private LinkedList<Integer> list= new LinkedList<>();
+    private LinkedList<Integer> list = new LinkedList<>();
 
     public NestedIterator(List<NestedInteger> nestedList) {
-        this.nestedList = nestedList;
+        buildList(nestedList);
     }
 
     @Override
     public Integer next() {
-        NestedInteger nestedInteger = nestedList.get(index);
-        index++;
-        if (nestedInteger.isInteger()){
-            list.addLast(nestedInteger.getInteger());
-        }else {
-            NestedIterator nestedNestedIterator = new NestedIterator(nestedInteger.getList());
-            while (nestedNestedIterator.hasNext()){
-                list.addLast(nestedNestedIterator.next());
+        return list.pop();
+    }
+
+    private void buildList(List<NestedInteger> nestedList) {
+        if (nestedList == null) {
+            return;
+        }
+        for (NestedInteger integer : nestedList) {
+            if (integer.isInteger()) {
+                list.addLast(integer.getInteger());
+            } else {
+                buildList(integer.getList());
             }
         }
-        return list.getFirst();
     }
 
     @Override
     public boolean hasNext() {
-        return index < nestedList.size();
+        return list.size() > 0;
     }
-
 }
 
 /**
