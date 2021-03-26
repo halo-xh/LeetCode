@@ -26,13 +26,12 @@ public class DeleteDuplicates2 {
     }
 
     public static ListNode deleteDuplicates(ListNode head) {
-        if (head == null) {
-            return null;
-        }
         ListNode tmp = head;
         while (tmp != null) {
             ListNode p1 = tmp.next;
             while (p1 != null && p1.val == tmp.val) {
+                // gc
+                p1.next = null;
                 p1 = p1.next;
                 tmp.next = p1;
             }
