@@ -16,10 +16,14 @@ public class MaxEnvelopes {
 
     public static void main(String[] args) {
         int[][] ar = new int[][]{
-                {5, 4}, {6, 4}, {6, 7}, {2, 3}};
+                {5, 4}, {6, 4}};
         System.out.println(maxEnvelopes(ar));
     }
 
+    /**
+     * 1. 排序： 按照第一个值升序排列，如果相同则第二个值升序
+     * 2. 最长升序子数组
+     */
     public static int maxEnvelopes(int[][] envelopes) {
         List<int[]> collect = Stream.of(envelopes).sorted((x1, x2) -> {
             if (x1[0] > x2[0]) {
@@ -34,7 +38,14 @@ public class MaxEnvelopes {
         Arrays.fill(res, 1);
         int max = 1;
         for (int i = 1; i < collect.size(); i++) {
-
+            int[] cur = collect.get(i);
+            for (int j = 0; j < i; j++) {
+                int[] ft = collect.get(j);
+                if (ft[0] < cur[0] && ft[1] < cur[1]) {
+                    res[i] = Math.max(res[j] + 1, res[i]);
+                }
+            }
+            max = Math.max(res[i], max);
 
         }
         return max;
