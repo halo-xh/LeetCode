@@ -15,14 +15,15 @@ public class ReverseBits {
 
     /**
      * int 32位
-     * 一个左移一个右移遇见n右移末尾为1则左移位加1
+     * 一个左移一个右移.
+     * 遇见n右移末尾为1则RES左移位加1
      */
     public int reverseBits(int n) {
         int res = 0;
         for (int i = 0; i < 32; i++) {
             res <<= 1;
-            // 末尾为0 则加1
-            res += (n & 1); 
+            // 末尾为1 则加1
+            res += (n & 1);
             n >>= 1;
         }
         return res;
