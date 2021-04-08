@@ -13,37 +13,58 @@ package com.xh.search.binarysearch;
 public class FindMin {
 
     public static void main(String[] args) {
-        int[] arr =new int[]{2,1};
+        int[] arr = new int[]{2, 1};
         FindMin findMin = new FindMin();
         System.out.println(findMin.findMin2(arr));
     }
+
     //O(n)
     public int findMin(int[] nums) {
         for (int i = 1; i < nums.length; i++) {
-            if (nums[i]<nums[i-1]){
+            if (nums[i] < nums[i - 1]) {
                 return nums[i];
             }
         }
-        return nums[nums.length-1];
+        return nums[nums.length - 1];
     }
 
     // O(log2n)
     public int findMin2(int[] nums) {
-        if (nums[0]<=nums[nums.length-1]){
+        if (nums[0] <= nums[nums.length - 1]) {
             return nums[0];
         }
         int left = 0;
-        int right = nums.length -1;
-        while (left<=right){
-            int mid = left +((right-left)>>>1);
-            if (nums[mid]>=nums[0]){
-                left = mid+1;
-            }else {
-                right = mid-1;
+        int right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + ((right - left) >>> 1);
+            if (nums[mid] >= nums[0]) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
             }
         }
         return nums[left];
 
     }
 
+
+    /**
+     * 2021-04-08
+     */
+    public int findMin3(int[] nums) {
+        if (nums[0] < nums[nums.length - 1]) {
+            return nums[0];
+        }
+        int left = 0;
+        int right = nums.length - 1;
+        while (left <= right) {
+            int mid = left + (right - left) >>> 1;
+            if (nums[mid] >= nums[0]) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return nums[left];
+    }
 }
