@@ -8,7 +8,7 @@ import java.util.*;
  * @author xiaohong
  * @version 1.0
  * @date 2021/2/5 11:18
- * @description https://leetcode-cn.com/problems/zi-fu-chuan-de-pai-lie-lcof/
+ * https://leetcode-cn.com/problems/zi-fu-chuan-de-pai-lie-lcof/
  * <p>
  * 输入一个字符串，打印出该字符串中字符的所有排列。
  * <p>
