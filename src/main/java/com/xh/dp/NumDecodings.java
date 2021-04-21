@@ -1,4 +1,6 @@
-package com.xh.others;
+package com.xh.dp;
+
+import java.util.Arrays;
 
 /**
  * @author xiaohong
@@ -11,6 +13,11 @@ package com.xh.others;
  * 而不关心 i-1 之前的位置。
  */
 public class NumDecodings {
+
+    public static void main(String[] args) {
+        NumDecodings decodings = new NumDecodings();
+        decodings.numDecodings("1231");
+    }
 
     public int numDecodings(String s) {
         int n = s.length();
@@ -31,6 +38,7 @@ public class NumDecodings {
                 f[i] += f[i - 2];
             }
         }
+        System.out.println(Arrays.toString(f));
         return f[n];
     }
 
