@@ -15,6 +15,7 @@ import java.util.Arrays;
 public class NumDecodings {
 
     public static void main(String[] args) {
+        System.out.println("分享主题空间".substring(0,2));
         NumDecodings decodings = new NumDecodings();
         decodings.numDecodings("1231");
     }
