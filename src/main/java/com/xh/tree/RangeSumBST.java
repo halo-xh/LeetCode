@@ -6,7 +6,8 @@ import java.util.Stack;
  * @author xiaohong
  * @version 1.0
  * @date 2021/4/27 18:53
- * @description
+ * <p>
+ * https://leetcode-cn.com/problems/range-sum-of-bst/
  */
 public class RangeSumBST {
 
@@ -25,7 +26,7 @@ public class RangeSumBST {
             if (pop.val >= low) {
                 sum += pop.val;
             }
-            root =pop.right;
+            root = pop.right;
         }
         return sum;
     }
