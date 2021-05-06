@@ -10,7 +10,7 @@ import java.util.function.IntPredicate;
  * @description
  */
 public class FizzBuzz2 {
-    private int n;
+    private final int n;
     private int i=1;
 
     public FizzBuzz2(int n) {
