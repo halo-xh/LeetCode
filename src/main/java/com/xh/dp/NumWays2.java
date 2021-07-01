@@ -1,5 +1,9 @@
 package com.xh.dp;
 
+import com.xh.tree.TreeNode;
+
+import java.util.*;
+
 /**
  * @author xiaohong
  * @version 1.0
@@ -37,20 +41,6 @@ public class NumWays2 {
 
 
     public int numWays(int n, int[][] relation, int k) {
-        int[][] dp = new int[k + 1][n];
-        dp[0][0] = 1;
-        for (int i = 0; i < k; i++) {
-            for (int[] real : relation) {
-                int src = real[0];
-                int dest = real[1];
-                dp[i + 1][dest] += dp[i][src];
-            }
-        }
-        return dp[k][n - 1];
-    }
-
-
-    public int numWays2(int n, int[][] relation, int k) {
         // dp[][] 记录 经过 i 次 走到 j 的方案数
         int[][] dp = new int[k + 1][n];
         dp[0][0] = 1;
@@ -71,8 +61,140 @@ public class NumWays2 {
     }
 
     // todo dfs
+    public int numWays3(int n, int[][] relation, int k) {
+        // 构造出发点和目的地集合映射
+        Map<Integer, Set<Integer>> routeMap = new HashMap<>();
+        for (int[] maps : relation) {
+            int src = maps[0];
+            int dest = maps[1];
+            Set<Integer> canArriveDest = routeMap.getOrDefault(src, new HashSet<>());
+            canArriveDest.add(dest);
+            routeMap.put(src, canArriveDest);
+        }
+        // start dfs.
+        int count = 0;
+        int l = 0;
+        Stack<Integer> stack = new Stack<>();
+        stack.push(0);
+        while (!stack.isEmpty()) {
+            Integer pop = stack.pop();
+            if (pop == n - 1 && l == k) {
+                count++;
+                continue;
+            }
+            Set<Integer> integers = routeMap.get(pop);
+            if (integers != null) {
+                l++;
+                for (Integer integer : integers) {
+                    stack.push(integer);
+                }
+            }
 
-    // todo bfs
+        }
 
+        return count;
+    }
+
+    /**
+     *           if (c == k_) {
+     *             if (dest == n_ - 1) {
+     *                 this.count++;
+     *             }
+     *             return;
+     *         }
+     *         Set<Integer> integers = routeMap.get(dest);
+     *         if (integers == null) {
+     *             return;
+     *         }
+     *         for (Integer integer : integers) {
+     *             dfs(routeMap, integer, c + 1);
+     *         }
+     *
+     *
+     */
+
+    /**
+     * DFS . 递归版。
+     */
+    int count = 0;
+    int k_ = 0;
+    int n_ = 0;
+
+    public int numWays4(int n, int[][] relation, int k) {
+        this.k_ = k;
+        this.n_ = n;
+        // 构造出发点和目的地集合映射
+        Map<Integer, Set<Integer>> routeMap = new HashMap<>();
+        for (int[] maps : relation) {
+            int src = maps[0];
+            int dest = maps[1];
+            Set<Integer> canArriveDest = routeMap.getOrDefault(src, new HashSet<>());
+            canArriveDest.add(dest);
+            routeMap.put(src, canArriveDest);
+        }
+        dfs(routeMap, 0, 0);
+        return count;
+    }
+
+    private void dfs(Map<Integer, Set<Integer>> routeMap, int dest, int c) {
+        if (c == k_) {
+            if (dest == n_ - 1) {
+                this.count++;
+            }
+            return;
+        }
+        Set<Integer> integers = routeMap.get(dest);
+        if (integers == null) {
+            return;
+        }
+        for (Integer integer : integers) {
+            dfs(routeMap, integer, c + 1);
+        }
+
+    }
+
+    /**
+     * my bfs. 类似层序遍历。 不管是不是 就走k层 是不是结果最后判断
+     */
+    public int numWays23(int n, int[][] relation, int k) {
+        // 构造出发点和目的地集合映射
+        Map<Integer, Set<Integer>> routeMap = new HashMap<>();
+        for (int[] maps : relation) {
+            int src = maps[0];
+            int dest = maps[1];
+            Set<Integer> canArriveDest = routeMap.getOrDefault(src, new HashSet<>());
+            canArriveDest.add(dest);
+            routeMap.put(src, canArriveDest);
+        }
+        // deque. 队列
+        Deque<Integer> deque = new ArrayDeque<>();
+        deque.addLast(0);
+        // 和二叉树的层序遍历是一样的。。 这里只需要遍历k层
+        while (!deque.isEmpty() && k-- > 0) {
+            int levelSize = deque.size();
+            while (levelSize-- > 0) {
+                Integer pollFirst = deque.pollFirst();
+                Set<Integer> routes = routeMap.get(pollFirst);
+                // 走到绝路了。。。。。
+                if (routes == null) {
+                    continue;
+                }
+                // 把所有目的地加入到下一层（二叉树遍历是加的左右子节点）
+                for (Integer route : routes) {
+                    deque.addLast(route);
+                }
+            }
+        }
+        // 这个时候deque就是走了k层后可以到达的值集合
+        // 遍历是不是最终想要的目的地n-1即可
+        int count = 0;
+        for (Integer integer : deque) {
+            if (integer == n - 1) {
+                count++;
+            }
+        }
+        return count;
+
+    }
 
 }
