@@ -1,7 +1,5 @@
 package com.xh.dp;
 
-import com.xh.tree.TreeNode;
-
 import java.util.*;
 
 /**
@@ -39,6 +37,15 @@ import java.util.*;
  */
 public class NumWays2 {
 
+    public static void main(String[] args) {
+        NumWays2 numWays2 = new NumWays2();
+        int[][] arr = new int[][]{{0, 2}, {2, 1}, {3, 4}, {2, 3}, {1, 4}, {2, 0}, {0, 4}};
+
+        System.out.println("numWays2.numWays(5, arr, 3) = " + numWays2.numWays3(5, arr, 3));
+
+
+    }
+
 
     public int numWays(int n, int[][] relation, int k) {
         // dp[][] 记录 经过 i 次 走到 j 的方案数
@@ -73,45 +80,36 @@ public class NumWays2 {
         }
         // start dfs.
         int count = 0;
-        int l = 0;
         Stack<Integer> stack = new Stack<>();
         stack.push(0);
+        int lk = 0;
+        int levelSize = 1;
         while (!stack.isEmpty()) {
-            Integer pop = stack.pop();
-            if (pop == n - 1 && l == k) {
-                count++;
-                continue;
-            }
-            Set<Integer> integers = routeMap.get(pop);
-            if (integers != null) {
-                l++;
+            while (lk++ < k) {
+                int dest = stack.peek();
+                Set<Integer> integers = routeMap.get(dest);
+                if (integers == null) {
+                    stack.pop();
+                    continue;
+                }
+                levelSize = integers.size();
                 for (Integer integer : integers) {
                     stack.push(integer);
                 }
             }
-
+            while (levelSize-- > 0) {
+                Integer pop = stack.pop();
+                if (pop == n - 1) {
+                    count++;
+                }
+            }
+            // 回溯
+            lk--;
+            stack.pop();
         }
-
         return count;
     }
 
-    /**
-     *           if (c == k_) {
-     *             if (dest == n_ - 1) {
-     *                 this.count++;
-     *             }
-     *             return;
-     *         }
-     *         Set<Integer> integers = routeMap.get(dest);
-     *         if (integers == null) {
-     *             return;
-     *         }
-     *         for (Integer integer : integers) {
-     *             dfs(routeMap, integer, c + 1);
-     *         }
-     *
-     *
-     */
 
     /**
      * DFS . 递归版。
