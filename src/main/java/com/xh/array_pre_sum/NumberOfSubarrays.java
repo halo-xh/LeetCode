@@ -14,25 +14,20 @@ import java.util.Map;
 public class NumberOfSubarrays {
 
     public static void main(String[] args) {
-        int[] ar = new int[]{1, 1, 2, 1, 1};
-        System.out.println(numberOfSubarrays(ar, 3));
+        int[] ar = new int[]{2, 2, 2, 1, 2, 2, 1, 2, 2, 2};
+        System.out.println(numberOfSubarrays(ar, 2));
     }
 
     public static int numberOfSubarrays(int[] nums, int k) {
         int[] sumJi = new int[nums.length + 1];
-        for (int i = 1; i < sumJi.length; i++) {
-            sumJi[i] = sumJi[i - 1] + (((nums[i - 1] & 1) == 1) ? 1 : 0);
-        }
-        System.out.println(Arrays.toString(sumJi));
-        Map<Integer, Integer> map = new HashMap<>();
+        sumJi[0] = 1;
         int count = 0;
-        map.put(0, 1);
-        for (int j : sumJi) {
-            int ct = j - k;
-            count += map.getOrDefault(ct, 0);
-            map.putIfAbsent(j, map.getOrDefault(j, 0) + 1);
+        int sum = 0;
+        for (int num : nums) {
+            sum += (num & 1);
+            count += (sum >= k) ? sumJi[sum - k] : 0;
+            sumJi[sum]++;
         }
-        System.out.println(map);
         return count;
     }
 
