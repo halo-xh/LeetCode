@@ -27,4 +27,18 @@ public class CountTriplets {
         return res;
 
     }
+
+    public int countTriplets2(int[] arr) {
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            int ans = arr[i];
+            for (int k = i + 1; k < arr.length; k++) {
+                ans ^= arr[k];
+                if (ans == 0) {
+                    count += k - i;
+                }
+            }
+        }
+        return count;
+    }
 }
