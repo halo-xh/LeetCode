@@ -14,8 +14,19 @@ public class DP_1019 {
 
 
     public static void main(String[] args) {
-
+        int[] arr = new int[]{0, 1
+        };
+        System.out.println(missingNumber(arr));
     }
+
+    public static int missingNumber(int[] nums) {
+        int res = 0;
+        for (int i = 1; i < nums.length; i++) {
+            res ^= nums[i];
+        }
+        return res;
+    }
+
 
     /**
      * https://leetcode-cn.com/leetbook/read/path-problems-in-dynamic-programming/rtwu06/
@@ -93,7 +104,7 @@ public class DP_1019 {
     /**
      * https://leetcode-cn.com/leetbook/read/path-problems-in-dynamic-programming/rtfiiv/
      * <p>
-     * O(n^2)
+     * O(n^2 )
      */
     public int minimumTotal(List<List<Integer>> triangle) {
         int n = triangle.size();
