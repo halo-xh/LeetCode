@@ -1,6 +1,7 @@
 package com.xh.dp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -12,12 +13,6 @@ import java.util.List;
 
 public class DP_1019 {
 
-
-    public static void main(String[] args) {
-        int[] arr = new int[]{0, 1
-        };
-        System.out.println(missingNumber(arr));
-    }
 
     public static int missingNumber(int[] nums) {
         int res = 0;
@@ -123,5 +118,152 @@ public class DP_1019 {
         return ans;
     }
 
+    /**
+     * https://leetcode-cn.com/leetbook/read/path-problems-in-dynamic-programming/r85adr/
+     */
+    public int minFallingPathSum(int[][] matrix) {
+        int n = matrix.length;
+        if (n == 1) {
+            return matrix[0][0];
+        }
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (j == 0) {
+                    matrix[i][j] = matrix[i][j] + Math.min(matrix[i - 1][j], matrix[i - 1][j + 1]);
+                } else if (j == n - 1) {
+                    matrix[i][j] = matrix[i][j] + Math.min(matrix[i - 1][j], matrix[i - 1][j - 1]);
+                } else {
+                    matrix[i][j] = matrix[i][j] + Math.min(Math.min(matrix[i - 1][j], matrix[i - 1][j + 1]), matrix[i - 1][j - 1]);
+                }
+            }
+        }
+        int res = Integer.MAX_VALUE;
+        for (int i : matrix[n - 1]) {
+            res = Math.min(res, i);
+        }
+        return res;
+    }
 
+    /**
+     * https://leetcode-cn.com/leetbook/read/path-problems-in-dynamic-programming/r8oh2h/
+     */
+    // O(n^3)
+    public int minFallingPathSum2(int[][] grid) {
+        int n = grid.length;
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                grid[i][j] = grid[i][j] + getMin(grid[i - 1], j);
+            }
+        }
+        return getMin(grid[n - 1], -1);
+    }
+
+    private static int getMin(int[] arr, int index) {
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < arr.length; i++) {
+            if (i != index) {
+                min = Math.min(min, arr[i]);
+            }
+        }
+        return min;
+    }
+
+    // O(n^2)
+    public static int minFallingPathSum3(int[][] grid) {
+        int n = grid.length;
+        int first_sum = 0, first_pos = -1, second_sum = 0;
+        for (int[] ints : grid) {
+            int fs = Integer.MAX_VALUE, fp = -1, ss = Integer.MAX_VALUE;
+            for (int j = 0; j < n; ++j) {
+                int cur_sum = (first_pos != j ? first_sum : second_sum) + ints[j];
+                if (cur_sum < fs) {
+                    ss = fs;
+                    fs = cur_sum;
+                    fp = j;
+                } else if (cur_sum < ss) {
+                    ss = cur_sum;
+                }
+            }
+            first_sum = fs;
+            first_pos = fp;
+            second_sum = ss;
+        }
+        return first_sum;
+    }
+
+
+    /**
+     * https://leetcode-cn.com/leetbook/read/path-problems-in-dynamic-programming/r8m6e7/
+     */
+    private static class Solution {
+        int mod = 1000000007;
+        // 缓存器：用于记录「特定状态」下的结果
+        // cache[i][fuel] 代表从位置 i 出发，当前剩余的油量为 fuel 的前提下，到达目标位置的「路径数量」
+        int[][] cache;
+
+        public int countRoutes(int[] ls, int start, int end, int fuel) {
+            int n = ls.length;
+            // 初始化缓存器
+            // 之所以要初始化为 -1
+            // 是为了区分「某个状态下路径数量为 0」和「某个状态尚未没计算过」两种情况
+            cache = new int[n][fuel + 1];
+            for (int i = 0; i < n; i++) {
+                Arrays.fill(cache[i], -1);
+            }
+            return dfs(ls, start, end, fuel);
+        }
+
+        /**
+         * 计算「路径数量」
+         *
+         * @param ls   入参 locations
+         * @param u    当前所在位置（ls 的下标）
+         * @param end  目标哦位置（ls 的下标）
+         * @param fuel 剩余油量
+         * @return 在位置 u 出发，油量为 fuel 的前提下，到达 end 的「路径数量」
+         */
+        int dfs(int[] ls, int u, int end, int fuel) {
+            // 如果缓存器中已经有答案，直接返回
+            if (cache[u][fuel] != -1) {
+                return cache[u][fuel];
+            }
+            int n = ls.length;
+            // base case 1：如果油量为 0，且不在目标位置
+            // 将结果 0 写入缓存器并返回
+            if (fuel == 0 && u != end) {
+                cache[u][fuel] = 0;
+                return 0;
+            }
+            // base case 2：油量不为 0，且无法到达任何位置
+            // 将结果 0 写入缓存器并返回
+            boolean hasNext = false;
+            for (int i = 0; i < n; i++) {
+                if (i != u) {
+                    int need = Math.abs(ls[u] - ls[i]);
+                    if (fuel >= need) {
+                        hasNext = true;
+                        break;
+                    }
+                }
+            }
+            if (fuel != 0 && !hasNext) {
+                cache[u][fuel] = u == end ? 1 : 0;
+                return cache[u][fuel];
+            }
+            // 计算油量为 fuel，从位置 u 到 end 的路径数量
+            // 由于每个点都可以经过多次，如果 u = end，那么本身就算一条路径
+            int sum = u == end ? 1 : 0;
+            for (int i = 0; i < n; i++) {
+                if (i != u) {
+                    int need = Math.abs(ls[i] - ls[u]);
+                    if (fuel >= need) {
+                        sum += dfs(ls, i, end, fuel - need);
+                        sum %= mod;
+                    }
+                }
+            }
+            cache[u][fuel] = sum;
+            return sum;
+        }
+    }
 }
