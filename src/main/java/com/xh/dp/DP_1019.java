@@ -266,4 +266,83 @@ public class DP_1019 {
             return sum;
         }
     }
+
+    private static class Solution2 {
+
+        int[][] cache;
+
+        public int countRoutes(int[] locations, int start, int finish, int fuel) {
+            cache = new int[locations.length][fuel];
+            for (int i = 0; i < cache.length; i++) {
+                Arrays.fill(cache[i], -1);
+            }
+            return dfs(locations, start, finish, fuel);
+        }
+
+        // cache[i][fuel]cache[i][fuel] 代表从位置 ii 出发，当前剩余的油量为 fuelfuel 的前提下，到达目标位置的「路径数量」
+        public int dfs(int[] locations, int start, int finish, int fuel) {
+            if (cache[start][fuel] != -1) {
+                return cache[start][fuel];
+            }
+            // 油走光没到终点
+            if (fuel == 0 && start != finish) {
+                cache[start][fuel] = 0;
+                return 0;
+            }
+            // 有油 不够去任何地方
+            if (Math.abs(locations[start] - locations[finish]) > fuel) {
+                cache[start][fuel] = 0;
+                return 0;
+            }
+            int sum = (start == finish) ? 1 : 0;
+            for (int i = 0; i < locations.length; i++) {
+                if (i != start) {
+                    int need = Math.abs(locations[i] - locations[start]);
+                    if (fuel >= need) {
+                        sum += dfs(locations, start, finish, fuel - need);
+                        sum %= 1000000007;
+                    }
+                }
+            }
+            cache[start][fuel] = sum;
+            return sum;
+
+        }
+
+    }
+
+
+    int mod = 1000000007;
+
+    public int countRoutes(int[] ls, int start, int end, int fuel) {
+        int n = ls.length;
+
+        // f[i][j] 代表从位置 i 出发，当前油量为 j 时，到达目的地的路径数
+        int[][] f = new int[n][fuel + 1];
+
+        // 对于本身位置就在目的地的状态，路径数为 1
+        for (int i = 0; i <= fuel; i++) f[end][i] = 1;
+
+        // 从状态转移方程可以发现 f[i][fuel]=f[i][fuel]+f[k][fuel-need]
+        // 在计算 f[i][fuel] 的时候依赖于 f[k][fuel-need]
+        // 其中 i 和 k 并无严格的大小关系
+        // 而 fuel 和 fuel-need 具有严格大小关系：fuel >= fuel-need
+        // 因此需要先从小到大枚举油量
+        for (int cur = 0; cur <= fuel; cur++) {
+            for (int i = 0; i < n; i++) {
+                for (int k = 0; k < n; k++) {
+                    if (i != k) {
+                        int need = Math.abs(ls[i] - ls[k]);
+                        if (cur >= need) {
+                            f[i][cur] += f[k][cur - need];
+                            f[i][cur] %= mod;
+                        }
+                    }
+                }
+            }
+        }
+        return f[start][fuel];
+    }
+
+
 }
