@@ -18,7 +18,7 @@ public class LengthOfLIS {
 
     public static void main(String[] args) {
         LengthOfLIS lengthOfLIS = new LengthOfLIS();
-        System.out.println(lengthOfLIS.lengthOfLIS(new int[]{10, 9, 2, 5, 3, 7, 101, 18}));
+        System.out.println(lengthOfLIS.lengthOfLIS(new int[]{10, 9, 2, 8, 5, 11, 3, 17, 101, 18}));
     }
 
     public int lengthOfLIS(int[] nums) {
@@ -36,5 +36,25 @@ public class LengthOfLIS {
             r = Math.max(re, r);
         }
         return r;
+    }
+
+    // 21-11-10. 以i为结尾的最长子串
+    public int lengthOfLIS2(int[] nums) {
+        int length = nums.length;
+        int[] res = new int[length + 1];
+        for (int i = 0; i < length; i++) {
+            int formerMaxLen = 0;
+            for (int j = 0; j < i; j++) {
+                if (nums[i] > nums[j]) {
+                    formerMaxLen = Math.max(formerMaxLen, res[j]);
+                }
+            }
+            res[i] = ++formerMaxLen;
+        }
+        int rs = 1;
+        for (int re : res) {
+            rs = Math.max(rs, re);
+        }
+        return rs;
     }
 }
