@@ -192,6 +192,32 @@ public class DP_1019 {
     }
 
 
+    // save memory
+    public int minimumTotal2(List<List<Integer>> triangle) {
+        int n = triangle.size();
+        if (n == 1) {
+            return triangle.get(0).get(0);
+        }
+        for (int i = 1; i < triangle.size(); i++) {
+            List<Integer> integers = triangle.get(i);
+            for (int j = 0; j < integers.size(); j++) {
+                if (j == 0) {
+                    integers.set(j, integers.get(j) + triangle.get(i - 1).get(j));
+                } else if (j == integers.size() - 1) {
+                    integers.set(j, integers.get(j) + triangle.get(i - 1).get(j - 1));
+                } else {
+                    integers.set(j, integers.get(j) + Math.min(triangle.get(i - 1).get(j - 1), triangle.get(i - 1).get(j)));
+                }
+            }
+        }
+        int min = Integer.MAX_VALUE;
+        for (Integer integer : triangle.get(n - 1)) {
+            min = Math.min(min, integer);
+        }
+        return min;
+    }
+
+
     /**
      * https://leetcode-cn.com/leetbook/read/path-problems-in-dynamic-programming/r8m6e7/
      */
@@ -343,6 +369,10 @@ public class DP_1019 {
         }
         return f[start][fuel];
     }
+
+
+
+
 
 
 }
