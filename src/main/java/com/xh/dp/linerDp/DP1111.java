@@ -43,39 +43,186 @@ public class DP1111 {
      * <p>
      * https://leetcode-cn.com/problems/chuan-di-xin-xi/
      */
-    public static int numWays(int n, int[][] relation, int k) {
+    public static int numWaysBFS(int n, int[][] relation, int k) {
         Map<Integer, Set<Integer>> routeMap = new HashMap<>(relation.length);
         for (int[] ints : relation) {
             Set<Integer> dest = routeMap.getOrDefault(ints[0], new HashSet<>());
             dest.add(ints[1]);
             routeMap.put(ints[0], dest);
         }
-
         int count = 0;
-        Stack<Integer> stack = new Stack<>();
-        stack.add(0);
+        Deque<Integer> deque = new LinkedList<>();
+        deque.add(0);
         int levelSize = 1;
-        k++; // k + 1 层
-        while (!stack.isEmpty() && k >= 0) {
-            Integer pop = stack.pop();
-            if (--levelSize == 0) {
-                k--;
+        while (!deque.isEmpty() && k >= 0) {
+            Integer pop = deque.pop();
+            levelSize--;
+            if (0 == k && (pop == n - 1)) {
+                count++;
             }
             Set<Integer> integers = routeMap.get(pop);
             if (integers != null) {
-                stack.addAll(integers);
+                integers.forEach(deque::addLast);
             }
             if (levelSize == 0) {
-                levelSize = stack.size();
-            }
-            if (0 == k && (pop == n - 1)) {
-                count++;
+                levelSize = deque.size();
+                k--;
             }
         }
         return count;
     }
 
-    public static void main(String[] args) {
-        int i = numWays(5, new int[][]{{0, 2}, {2, 1}, {3, 4}, {2, 3}, {1, 4}, {2, 0}, {0, 4}}, 3);
+    static int res = 0;
+
+    public static int numWaysDFS(int n, int[][] relation, int k) {
+        Map<Integer, Set<Integer>> routeMap = new HashMap<>(relation.length);
+        for (int[] ints : relation) {
+            Set<Integer> dest = routeMap.getOrDefault(ints[0], new HashSet<>());
+            dest.add(ints[1]);
+            routeMap.put(ints[0], dest);
+        }
+        dfs(n, routeMap, 0, k);
+        return res;
     }
+
+
+    public static void dfs(int n, Map<Integer, Set<Integer>> routeMap, int cur, int k) {
+        if (k == 0 && (cur == n - 1)) {
+            res++;
+        }
+        if (k > 0) {
+            Set<Integer> integers = routeMap.get(cur);
+            if (integers != null) {
+                for (Integer integer : integers) {
+                    dfs(n, routeMap, integer, k - 1);
+                }
+            }
+        }
+    }
+
+    /**
+     * 邻接矩阵 DFS
+     */
+    static int res2 = 0;
+
+    public static int numWaysDFSMatrix(int n, int[][] relation, int k) {
+        int[][] routeArr = new int[n][n];
+        for (int[] ints : relation) {
+            int lo = ints[0];
+            int dest = ints[1];
+            Arrays.fill(routeArr[lo], -1);
+            routeArr[lo][dest] = 1;
+        }
+
+        dfs(n, routeArr, 0, k);
+        return res2;
+    }
+
+    public static void dfs(int n, int[][] routeMap, int cur, int k) {
+        if (k == 0 && cur == n - 1) {
+            res2++;
+        }
+        if (k > 0) {
+            int[] ints = routeMap[cur];
+            for (int i = 0; i < ints.length; i++) {
+                if (ints[i] == 1) {
+                    dfs(n, routeMap, i, k - 1);
+                }
+            }
+        }
+    }
+
+    /**
+     * dp[k][n] = sum (dp[k-1][map(n)])
+     */
+    public static int numWaysDP(int n, int[][] relation, int k) {
+        int length = relation.length;
+        int[][] dp = new int[k + 1][length];
+        dp[0][0] = 1;
+        for (int i = 1; i <= k; i++) {
+            for (int[] ints : relation) {
+                int orin = ints[0];
+                int dest = ints[1];
+                dp[i][dest] += dp[i - 1][orin];
+            }
+        }
+        return dp[k][n - 1];
+    }
+
+
+    /**
+     * https://leetcode-cn.com/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof/
+     */
+    public static int maxSubArray(int[] nums) {
+        int[] dp = new int[nums.length];
+        dp[0] = nums[0];
+        int max = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
+            max = Math.max(max, dp[i]);
+        }
+        return max;
+    }
+
+    /**
+     * https://leetcode-cn.com/problems/fei-bo-na-qi-shu-lie-lcof/
+     */
+    public static int fib(int n) {
+        int f1 = 0;
+        int f2 = 1;
+        for (int i = 0; i < n; i++) {
+            int res = (f2 + f1) % 1000000007;
+            f1 = f2;
+            f2 = res;
+        }
+        return f1;
+    }
+
+
+    /**
+     * https://leetcode-cn.com/problems/maximum-number-of-events-that-can-be-attended-ii/
+     */
+    public static int maxValue(int[][] events, int k) {
+        int elen = events.length;
+        int[][] dp = new int[elen + 1][k + 1];
+        Arrays.sort(events, Comparator.comparingInt(o -> o[1]));
+        for (int j = 1; j <= elen; j++) {
+            int start = events[j - 1][0];
+            int val = events[j - 1][2];
+
+            int formerEnd = 0;
+            for (int i = j - 2; i >= 0; i--) {
+                if (events[i][1] < start) {
+                    formerEnd = i + 1;
+                    break;
+                }
+            }
+
+//            for (int p = j - 1; p >= 1; p--) {
+//                int[] prev = events[p - 1];
+//                if (prev[1] < start) {
+//                    formerEnd = p;
+//                    break;
+//                }
+//            }
+
+            for (int i = 1; i <= k; i++) {
+                dp[j][i] = Math.max(dp[formerEnd][i - 1] + val, dp[j - 1][i]);
+            }
+        }
+        return dp[elen][k];
+    }
+
+
+    public static void main(String[] args) {
+//        int i = numWays(5, new int[][]{{0, 2}, {2, 1}, {3, 4}, {2, 3}, {1, 4}, {2, 0}, {0, 4}}, 3);
+//        int i = numWaysDFSMatrix(5, new int[][]{{0, 2}, {2, 1}, {3, 4}, {2, 3}, {1, 4}, {2, 0}, {0, 4}}, 3);
+//        System.out.println("i = " + i);
+//        int[] ints = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+//        System.out.println(maxSubArray(ints));
+        int[][] arr = new int[][]{{1, 3, 4}, {2, 4, 1}, {1, 1, 4}, {3, 5, 1}, {2, 5, 5}};
+        System.out.println(maxValue(arr, 3));
+    }
+
+
 }
