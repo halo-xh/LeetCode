@@ -10,37 +10,6 @@ import java.util.*;
 public class DP1111 {
 
     /**
-     * 小朋友 A 在和 ta 的小伙伴们玩传信息游戏，游戏规则如下：
-     * <p>
-     * 有 n 名玩家，所有玩家编号分别为 0 ～ n-1，其中小朋友 A 的编号为 0
-     * 每个玩家都有固定的若干个可传信息的其他玩家（也可能没有）。传信息的关系是单向的（比如 A 可以向 B 传信息，但 B 不能向 A 传信息）。
-     * 每轮信息必须需要传递给另一个人，且信息可重复经过同一个人
-     * 给定总玩家数 n，以及按 [玩家编号,对应可传递玩家编号] 关系组成的二维数组 relation。
-     * 返回信息从小 A (编号 0 ) 经过 k 轮传递到编号为 n-1 的小伙伴处的方案数；若不能到达，返回 0。
-     * <p>
-     * 示例 1：
-     * <p>
-     * 输入：n = 5, relation = [[0,2],[2,1],[3,4],[2,3],[1,4],[2,0],[0,4]], k = 3
-     * <p>
-     * 输出：3
-     * <p>
-     * 解释：信息从小 A 编号 0 处开始，经 3 轮传递，到达编号 4。共有 3 种方案，分别是 0->2->0->4， 0->2->1->4， 0->2->3->4。
-     * <p>
-     * 示例 2：
-     * <p>
-     * 输入：n = 3, relation = [[0,2],[2,1]], k = 2
-     * <p>
-     * 输出：0
-     * <p>
-     * 解释：信息不能从小 A 处经过 2 轮传递到编号 2
-     * <p>
-     * 限制：
-     * <p>
-     * 2 <= n <= 10
-     * 1 <= k <= 5
-     * 1 <= relation.length <= 90, 且 relation[i].length == 2
-     * 0 <= relation[i][0],relation[i][1] < n 且 relation[i][0] != relation[i][1]
-     * <p>
      * https://leetcode-cn.com/problems/chuan-di-xin-xi/
      */
     public static int numWaysBFS(int n, int[][] relation, int k) {
@@ -213,6 +182,132 @@ public class DP1111 {
         return dp[elen][k];
     }
 
+    /**
+     * https://leetcode-cn.com/problems/decode-ways-ii/
+     */
+    public int numDecodings(String s) {
+        return 0;
+    }
+
+    /**
+     * https://leetcode-cn.com/problems/counting-bits/
+     */
+    public static int[] countBits(int n) {
+        int[] res = new int[n + 1];
+        for (int i = 0; i <= n; i++) {
+            int count = 0;
+            int k = i;
+            while (k != 0) {
+                count += (k & 1);
+                k = k >> 1;
+            }
+            res[i] = count;
+        }
+        return res;
+    }
+
+    // ref:https://leetcode-cn.com/problems/counting-bits/solution/hen-qing-xi-de-si-lu-by-duadua/
+    public static int[] countBits2(int n) {
+        int[] res = new int[n + 1];
+        res[0] = 0;
+        for (int i = 0; i <= n; i++) {
+            if ((i & 1) == 0) { // 偶数
+                res[i] = res[i >> 1];
+            } else {
+                res[i] = res[i - 1] + 1;
+            }
+        }
+        return res;
+    }
+
+    /**
+     * https://leetcode-cn.com/problems/pascals-triangle-ii/
+     */
+    public List<Integer> getRow(int rowIndex) {
+        if (rowIndex == 0) {
+            return Collections.singletonList(1);
+        }
+        int[][] res = new int[rowIndex + 1][rowIndex + 1];
+        for (int i = 0; i < res.length; i++) {
+            for (int j = 0; j <= i; j++) {
+                if ((j == 0) || (j == i)) {
+                    res[i][j] = 1;
+                    continue;
+                }
+                res[i][j] = res[i - 1][j - 1] + res[i - 1][j];
+            }
+        }
+        List<Integer> re = new ArrayList<>(res[rowIndex - 1].length);
+        for (int i : res[rowIndex]) {
+            re.add(i);
+        }
+        return re;
+    }
+
+    public List<Integer> getRow2(int rowIndex) {
+        if (rowIndex == 0) {
+            return Collections.singletonList(1);
+        }
+        int[] res = new int[rowIndex + 1];
+        for (int i = 0; i <= rowIndex; i++) {
+            for (int j = i; j >= 0; j--) {
+                if ((j == 0) || (j == i)) {
+                    res[i] = 1;
+                    continue;
+                }
+                res[j] += res[j - 1];
+            }
+        }
+        List<Integer> re = new ArrayList<>(res.length);
+        for (int i : res) {
+            re.add(i);
+        }
+        return re;
+    }
+
+    /**
+     * 给你一个非负整数数组 nums ，你最初位于数组的第一个位置。
+     * 数组中的每个元素代表你在该位置可以跳跃的最大长度。
+     * 你的目标是使用最少的跳跃次数到达数组的最后一个位置。
+     * 假设你总是可以到达数组的最后一个位置。
+     * 示例 1:
+     * <p>
+     * 输入: nums = [2,3,1,1,4]
+     * 输出: 2
+     * 解释: 跳到最后一个位置的最小跳跃数是 2。 从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
+     */
+    public int jumpBFS(int[] nums) {
+        int[][] routArr = new int[nums.length][nums.length];
+        // build route arr
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+            for (int j = i; j <= num; j++) {
+                routArr[num][j] = 1;
+            }
+        }
+        Deque<Integer> deque = new LinkedList<>();
+        deque.addLast(nums[0]);
+        int min = 0;
+        int count = 0;
+        int levelSize = 1;
+        while (!deque.isEmpty()) {
+            Integer pop = deque.pop();
+            int[] ints = routArr[pop];
+            levelSize--;
+            if (pop == nums.length - 1) {
+                count++;
+                min = Math.min(count, min);
+            }
+            for (int i = 0; i < ints.length; i++) {
+                deque.addLast(ints[i]);
+            }
+            if (levelSize == 0) {
+                levelSize = deque.size();
+            }
+        }
+        return min;
+    }
+
 
     public static void main(String[] args) {
 //        int i = numWays(5, new int[][]{{0, 2}, {2, 1}, {3, 4}, {2, 3}, {1, 4}, {2, 0}, {0, 4}}, 3);
@@ -220,8 +315,10 @@ public class DP1111 {
 //        System.out.println("i = " + i);
 //        int[] ints = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
 //        System.out.println(maxSubArray(ints));
-        int[][] arr = new int[][]{{1, 3, 4}, {2, 4, 1}, {1, 1, 4}, {3, 5, 1}, {2, 5, 5}};
-        System.out.println(maxValue(arr, 3));
+//        int[][] arr = new int[][]{{1, 3, 4}, {2, 4, 1}, {1, 1, 4}, {3, 5, 1}, {2, 5, 5}};
+//        System.out.println(maxValue(arr, 3));
+        int[] ints = countBits2(5);
+        System.out.println("ints = " + Arrays.toString(ints));
     }
 
 
