@@ -1,5 +1,7 @@
 package com.xh.dp.linerDp;
 
+import com.sun.org.apache.bcel.internal.generic.BREAKPOINT;
+
 import java.util.*;
 
 /**
@@ -276,30 +278,34 @@ public class DP1111 {
      * 输出: 2
      * 解释: 跳到最后一个位置的最小跳跃数是 2。 从下标为 0 跳到下标为 1 的位置，跳 1 步，然后跳 3 步到达数组的最后一个位置。
      */
-    public int jumpBFS(int[] nums) {
-        int[][] routArr = new int[nums.length][nums.length];
+    public static int jumpBFS(int[] nums) {
+        int length = nums.length;
+        int[][] routArr = new int[length][length];
         // build route arr
-        for (int i = 0; i < nums.length; i++) {
+        for (int i = 0; i < length; i++) {
             int num = nums[i];
-            for (int j = i; j <= num; j++) {
-                routArr[num][j] = 1;
+            for (int j = i; j <= num + i && j < length; j++) {
+                routArr[i][j] = 1;
             }
         }
         Deque<Integer> deque = new LinkedList<>();
-        deque.addLast(nums[0]);
-        int min = 0;
+        deque.addLast(0);
+        int min = Integer.MAX_VALUE;
         int count = 0;
         int levelSize = 1;
         while (!deque.isEmpty()) {
             Integer pop = deque.pop();
             int[] ints = routArr[pop];
             levelSize--;
-            if (pop == nums.length - 1) {
+            if (pop == length - 1) {
                 count++;
                 min = Math.min(count, min);
+                break;
             }
             for (int i = 0; i < ints.length; i++) {
-                deque.addLast(ints[i]);
+                if (ints[i] == 1 && i > pop) {
+                    deque.addLast(i);
+                }
             }
             if (levelSize == 0) {
                 levelSize = deque.size();
@@ -308,17 +314,24 @@ public class DP1111 {
         return min;
     }
 
+    public static int jump(int[] nums) {
+        int maxPos = 0;   // 纪录位置 i 可以跳到的最远距离
+        int end = 0;      // 纪录位置本次跳跃可以抵达的右边界
+        int step = 0;     // 纪录跳跃次数
+        for (int i = 0; i < nums.length - 1; i++) {
+            maxPos = Math.max(maxPos, nums[i] + i);   // 先计算位置 i 可以跳跃的最远距离
+            if (i == end) {  // i == end 表示本次跳跃的所有可能都已经尝试, 那么就需要更新 end 和 step
+                end = maxPos;
+                step++;
+            }
+        }
+        return step;
+    }
+
 
     public static void main(String[] args) {
-//        int i = numWays(5, new int[][]{{0, 2}, {2, 1}, {3, 4}, {2, 3}, {1, 4}, {2, 0}, {0, 4}}, 3);
-//        int i = numWaysDFSMatrix(5, new int[][]{{0, 2}, {2, 1}, {3, 4}, {2, 3}, {1, 4}, {2, 0}, {0, 4}}, 3);
-//        System.out.println("i = " + i);
-//        int[] ints = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
-//        System.out.println(maxSubArray(ints));
-//        int[][] arr = new int[][]{{1, 3, 4}, {2, 4, 1}, {1, 1, 4}, {3, 5, 1}, {2, 5, 5}};
-//        System.out.println(maxValue(arr, 3));
-        int[] ints = countBits2(5);
-        System.out.println("ints = " + Arrays.toString(ints));
+        int[] arr = new int[]{2, 3, 1, 1, 4};
+        System.out.println(jump(arr));
     }
 
 
