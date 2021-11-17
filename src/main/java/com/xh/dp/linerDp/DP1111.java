@@ -332,31 +332,29 @@ public class DP1111 {
      * https://leetcode-cn.com/problems/out-of-boundary-paths/
      */
     public int findPathsdp(int m, int n, int maxMove, int startRow, int startColumn) {
-        int[][] res = new int[m + 1][n + 1];
-
-
-        return 0;
-    }
-
-    int fpres = 0;
-
-    public int findPathsdfs(int m, int n, int maxMove, int startRow, int startColumn) {
-        fpdfs(startRow, startColumn, m, n, maxMove);
-        return fpres;
-    }
-
-    public void fpdfs(int start, int end, int m, int n, int k) {
-        if (k == 0) {
-            return;
-        }
-        if (start == 0 || end == 0 || start == m || end == n) {
-            fpres++;
-        }
-        for (int i = start; i <= m; i++) {
-            for (int j = end; j <= n; j++) {
-                fpdfs(i, j, m, n, k - 1);
+        int[][][] res = new int[m + 1][n + 1][maxMove + 1];
+        res[startRow][startColumn][0] = 1;
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        int r = 0;
+        for (int k = 0; k < maxMove; k++) {
+            for (int i = 0; i < m; i++) {
+                for (int j = 0; j < n; j++) {
+                    int count = res[i][j][k];
+                    if (count > 0) {
+                        for (int[] direction : directions) {
+                            int i1 = direction[0] + i;
+                            int j1 = direction[1] + j;
+                            if (i1 < m && j1 < n && j1 >= 0 && i1 >= 0) {
+                                res[i1][j1][k + 1] = (count + res[i1][j1][k + 1]) % 1000000007;
+                            } else {
+                                r = (r + count) % 1000000007;
+                            }
+                        }
+                    }
+                }
             }
         }
+        return r;
     }
 
 
