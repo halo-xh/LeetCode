@@ -328,6 +328,37 @@ public class DP1111 {
         return step;
     }
 
+    /**
+     * https://leetcode-cn.com/problems/out-of-boundary-paths/
+     */
+    public int findPathsdp(int m, int n, int maxMove, int startRow, int startColumn) {
+        int[][] res = new int[m + 1][n + 1];
+
+
+        return 0;
+    }
+
+    int fpres = 0;
+
+    public int findPathsdfs(int m, int n, int maxMove, int startRow, int startColumn) {
+        fpdfs(startRow, startColumn, m, n, maxMove);
+        return fpres;
+    }
+
+    public void fpdfs(int start, int end, int m, int n, int k) {
+        if (k == 0) {
+            return;
+        }
+        if (start == 0 || end == 0 || start == m || end == n) {
+            fpres++;
+        }
+        for (int i = start; i <= m; i++) {
+            for (int j = end; j <= n; j++) {
+                fpdfs(i, j, m, n, k - 1);
+            }
+        }
+    }
+
 
     public static void main(String[] args) {
         int[] arr = new int[]{2, 3, 1, 1, 4};
