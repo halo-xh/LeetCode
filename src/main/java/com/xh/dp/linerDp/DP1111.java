@@ -357,10 +357,97 @@ public class DP1111 {
         return r;
     }
 
+    /**
+     * https://leetcode-cn.com/problems/is-subsequence/
+     */
+    public boolean isSubsequence(String s, String t) {
+        int n = s.length(), m = t.length();
+        int i = 0, j = 0;
+        while (i < n && j < m) {
+            if (s.charAt(i) == t.charAt(j)) {
+                i++;
+            }
+            j++;
+        }
+        return i == n;
+    }
+
+    public boolean isSubsequenceDP(String s, String t) {
+        int n = s.length(), m = t.length();
+        int[][] dict = new int[m][26];
+        return true;
+    }
+
+    /**
+     * https://leetcode-cn.com/problems/pascals-triangle/
+     */
+    public static List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+        res.add(Collections.singletonList(1));
+        for (int i = 1; i < numRows; i++) {
+            List<Integer> former = res.get(i - 1);
+            ArrayList<Integer> le = new ArrayList<>(i + 1);
+            for (int j = 0; j <= i; j++) {
+                if (j == 0) {
+                    le.add(1);
+                } else if (j == i) {
+                    le.add(1);
+                } else {
+                    le.add(former.get(j - 1) + former.get(j));
+                }
+            }
+            res.add(le);
+        }
+        return res;
+    }
+
+    /**
+     * https://leetcode-cn.com/problems/min-cost-climbing-stairs/
+     */
+    public static int minCostClimbingStairs(int[] cost) {
+        int[] dp = new int[cost.length + 1];
+        dp[0] = cost[0];
+        dp[1] = cost[1];
+        for (int i = 2; i < cost.length; i++) {
+            dp[i] = Math.min(dp[i - 2], dp[i - 1]) + cost[i];
+        }
+        return Math.min(dp[cost.length - 1], dp[cost.length - 2]);
+    }
+
+
+    public static int minCostClimbingStairs2(int[] cost) {
+        for (int i = 2; i < cost.length; i++) {
+            cost[i] = Math.min(cost[i - 2], cost[i - 1]) + cost[i];
+        }
+        return Math.min(cost[cost.length - 1], cost[cost.length - 2]);
+    }
+
+    /**
+     * https://leetcode-cn.com/problems/fibonacci-number/
+     */
+    public static int fib2(int n) {
+        if (n == 0) {
+            return 0;
+        }
+        int i1 = 0, i2 = 1;
+        for (int i = 1; i < n; i++) {
+            int i3 = i1 + i2;
+            i1 = i2;
+            i2 = i3;
+        }
+        return i2;
+    }
+
+    /**
+     * https://leetcode-cn.com/problems/divisor-game/
+     */
+    public boolean divisorGame(int n) {
+        return (n & 1) != 0;
+    }
+
 
     public static void main(String[] args) {
-        int[] arr = new int[]{2, 3, 1, 1, 4};
-        System.out.println(jump(arr));
+        System.out.println(fib2(4));
     }
 
 
