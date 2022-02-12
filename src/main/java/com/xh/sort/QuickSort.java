@@ -74,9 +74,8 @@ public class QuickSort {
      */
     private static int[] qs(int[] arr, int left, int right) {
         if (left < right) {
-            int flag = arr[right];
+            int flag = arr[right], smidx = left - 1;
             int temp;
-            int smidx = left - 1;
             for (int i = left; i < right; i++) {
                 if (arr[i] <= flag) {
                     smidx++;
@@ -105,5 +104,34 @@ public class QuickSort {
         System.out.println(Arrays.toString(ints));
     }
 
+    public int sumOfUnique(int[] nums) {
+        int sum = 0;
+        HashMap<Integer, Integer> map = new HashMap<>(nums.length);
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if (entry.getValue().equals(1)) {
+                sum += entry.getKey();
+            }
+        }
+        return sum;
+    }
+
+
+    /**
+     * https://leetcode-cn.com/problems/minimum-difference-between-highest-and-lowest-of-k-scores/
+     */
+    public int minimumDifference(int[] nums, int k) {
+        if (nums.length == 1) {
+            return 0;
+        }
+        int[] ints = qs(nums, 0, nums.length - 1);
+        int min = ints[k - 1] - ints[0];
+        for (int i = k; i < ints.length; i++) {
+            min = Math.min(ints[i] - ints[i - k + 1], min);
+        }
+        return min;
+    }
 
 }

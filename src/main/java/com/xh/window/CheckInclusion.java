@@ -1,8 +1,6 @@
 package com.xh.window;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author xiaohong
@@ -91,12 +89,12 @@ public class CheckInclusion {
      * https://leetcode-cn.com/problems/search-insert-position/
      */
     public static int searchInsert(int[] nums, int target) {
-        int left = 0, right = nums.length -1;
+        int left = 0, right = nums.length - 1;
         while (left <= right) {
             int mid = left + ((right - left) >>> 1);
             if (nums[mid] >= target) {
                 right = mid - 1;
-            } else  {
+            } else {
                 left = mid + 1;
             }
         }
@@ -104,12 +102,54 @@ public class CheckInclusion {
     }
 
 
+    /**
+     * https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/
+     */
+    public static int lengthOfLongestSubstring(String s) {
+        if (s.length() == 0) {
+            return 0;
+        }
+        int maxLen = 1, left = 0;
+        HashMap<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (map.containsKey(c)) {
+                left = Math.max(left, map.get(c) + 1);
+            }
+            map.put(c, i);
+            maxLen = Math.max(maxLen, i - left + 1);
+        }
+        return maxLen;
+    }
+
+    /**
+     * https://leetcode-cn.com/problems/repeated-dna-sequences/
+     */
+    public static List<String> findRepeatedDnaSequences(String s) {
+        if (s.length() < 10) {
+            return Collections.emptyList();
+        }
+        HashSet<String> res = new HashSet<>();
+        HashSet<String> all = new HashSet<>();
+        for (int i = 10; i <= s.length(); i++) {
+            String substring = s.substring(i - 10, i);
+            if (all.contains(substring)) {
+                res.add(substring);
+            }
+            all.add(substring);
+        }
+        return new ArrayList<>(res);
+    }
+
+
     public static void main(String[] args) {
         int[] arr = {1, 3, 5, 6};
         int i = searchInsert(arr, 3);
         System.out.println("i = " + i);
-
+        int abcabcbb = lengthOfLongestSubstring("abcabcbb");
+        System.out.println("abcabcbb = " + abcabcbb);
+        List<String> aaaaacccccaaaaaccccccaaaaagggttt = findRepeatedDnaSequences("AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT");
+        System.out.println("aaaaacccccaaaaaccccccaaaaagggttt = " + aaaaacccccaaaaaccccccaaaaagggttt);
     }
-
 
 }
