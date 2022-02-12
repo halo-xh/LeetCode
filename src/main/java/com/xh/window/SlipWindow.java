@@ -7,39 +7,86 @@ import java.util.*;
  * @version 1.0
  * @date 2021/7/19 17:06
  * <p>
- * https://leetcode-cn.com/problems/permutation-in-string/
  */
-public class CheckInclusion {
+public class SlipWindow {
 
-
-    public boolean checkInclusion(String s1, String s2) {
-        int left = 0, right = 0;
-        int length = s2.length();
-        Map<Character, Integer> map = new HashMap<>();
-        char[] s1chars = s1.toCharArray();
-        int s1Len = s1chars.length;
-        for (char c : s1chars) {
-            map.put(c, map.getOrDefault(c, 0) + 1);
+    /**
+     * https://leetcode-cn.com/problems/permutation-in-string/
+     */
+    public static boolean checkInclusion(String s1, String s2) {
+        if (s2.length() < s1.length()) {
+            return false;
         }
-        while (right < length) {
-            char c = s2.charAt(right);
-            right++;
-            Integer integer = map.get(c);
-            if (integer != null && integer > 0) {
-                map.put(c, integer - 1);
-                s1Len--;
-                if (s1Len == 0) {
-                    return true;
-                }
-            }
-            while (right - left >= s1.length()) {
-
-            }
-
-
+        HashMap<Character, Integer> map1 = new HashMap<>(s1.length());
+        HashMap<Character, Integer> map = new HashMap<>(s1.length());
+        for (int i = 0; i < s1.length(); i++) {
+            map1.put(s1.charAt(i), map1.getOrDefault(s1.charAt(i), 0) + 1);
+            map.put(s2.charAt(i), map.getOrDefault(s2.charAt(i), 0) + 1);
         }
+        for (int i = 0; i < s2.length() - s1.length(); i++) {
+            if (mapEquals(map1, map)) {
+                return true;
+            }
+            map.put(s2.charAt(i), map.get(s2.charAt(i)) - 1);
+            char charAt = s2.charAt(i + s1.length());
+            map.put(charAt, map.getOrDefault(charAt, 0) + 1);
+        }
+        return mapEquals(map1, map);
+    }
 
+    private static boolean mapEquals(HashMap<Character, Integer> map1, HashMap<Character, Integer> map2) {
+        Set<Map.Entry<Character, Integer>> entries = map1.entrySet();
+        for (Map.Entry<Character, Integer> entry : entries) {
+            if (!map1.get(entry.getKey()).equals(map2.get(entry.getKey()))) {
+                return false;
+            }
+        }
         return true;
+    }
+
+    public static boolean checkInclusion2(String s1, String s2) {
+        if (s2.length() < s1.length()) {
+            return false;
+        }
+        short[] c1 = new short[26];
+        short[] c2 = new short[26];
+        for (int i = 0; i < s1.length(); i++) {
+            c1[s1.charAt(i) - 'a']++;
+            c2[s2.charAt(i) - 'a']++;
+        }
+        for (int i = 0; i < s2.length() - s1.length(); i++) {
+            if (Arrays.equals(c1, c2)) {
+                return true;
+            }
+            c2[s2.charAt(i) - 'a']--;
+            char charAt = s2.charAt(i + s1.length());
+            c2[charAt - 'a']++;
+        }
+        return Arrays.equals(c1, c2);
+    }
+
+    public boolean checkInclusion3(String s1, String s2) {
+        int n = s1.length(), m = s2.length();
+        if (n > m) {
+            return false;
+        }
+        int[] cnt = new int[26];
+        for (int i = 0; i < n; ++i) {
+            --cnt[s1.charAt(i) - 'a'];
+        }
+        int left = 0;
+        for (int right = 0; right < m; ++right) {
+            int x = s2.charAt(right) - 'a';
+            ++cnt[x];
+            while (cnt[x] > 0) {
+                --cnt[s2.charAt(left) - 'a'];
+                ++left;
+            }
+            if (right - left + 1 == n) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -150,6 +197,8 @@ public class CheckInclusion {
         System.out.println("abcabcbb = " + abcabcbb);
         List<String> aaaaacccccaaaaaccccccaaaaagggttt = findRepeatedDnaSequences("AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT");
         System.out.println("aaaaacccccaaaaaccccccaaaaagggttt = " + aaaaacccccaaaaaccccccaaaaagggttt);
+        String s1 = "adc", s2 = "dcda";
+        System.out.println(checkInclusion2(s1, s2));
     }
 
 }
