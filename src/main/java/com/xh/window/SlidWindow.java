@@ -258,6 +258,49 @@ public class SlidWindow {
         return maxSum * 1.0 / k;
     }
 
+    /**
+     * https://leetcode-cn.com/problems/sliding-window-median/
+     */
+    public static double[] medianSlidingWindow(int[] nums, int k) {
+        LinkedList<Integer> linkedList = new LinkedList<>();
+        double[] res = new double[nums.length - k + 1];
+        for (int i = 0; i < k; i++) {
+            linkedList.addLast(nums[i]);
+        }
+        res[0] = getMid(linkedList);
+        for (int i = k; i < nums.length; i++) {
+            linkedList.pollFirst();
+            linkedList.addLast(nums[i]);
+            res[i - k + 1] = getMid(linkedList);
+        }
+        return res;
+    }
+
+    private static double getMid(List<Integer> nums) {
+        ArrayList<Integer> integers = new ArrayList<>(nums);
+        Collections.sort(integers);
+        int t = nums.size() >> 1;
+        if ((nums.size() & 1) == 1) {
+            return integers.get(t);
+        } else {
+            return (Double.valueOf(integers.get(t)) + Double.valueOf(integers.get(t - 1))) / 2;
+        }
+    }
+
+    public static double[] medianSlidingWindow2(int[] nums, int k) {
+        double[] res = new double[nums.length - k + 1];
+        for (int i = 0; i <= nums.length - k; i++) {
+            int[] copy = Arrays.copyOfRange(nums, i, i + k);
+            Arrays.sort(copy);
+            int mid = k >> 1;
+            if ((k & 1) == 1) {
+                res[i] = copy[mid];
+            } else {
+                res[i] = ((double) copy[mid] + (double) copy[mid - 1]) / 2;
+            }
+        }
+        return res;
+    }
 
     public static void main(String[] args) {
         int[] arr = {1, 3, 5, 6};
@@ -270,8 +313,10 @@ public class SlidWindow {
         String s1 = "adc", s2 = "dcda";
         System.out.println(checkInclusion2(s1, s2));
         System.out.println(maxNumberOfBalloons2("leetcode"));
-        int[] ar2 = new int[]{4};
-        System.out.println(findMaxAverage(ar2, 1));
+        int[] ar2 = new int[]{1,3,-1,-3,5,3,6,7};
+        System.out.println(findMaxAverage2(ar2, 1));
+        System.out.println(Arrays.toString(medianSlidingWindow2(ar2, 3)));
+        System.out.println("(1&3) = " + (1 & 3));
     }
 
 }
