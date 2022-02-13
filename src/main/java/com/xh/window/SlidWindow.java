@@ -8,7 +8,7 @@ import java.util.*;
  * @date 2021/7/19 17:06
  * <p>
  */
-public class SlipWindow {
+public class SlidWindow {
 
     /**
      * https://leetcode-cn.com/problems/permutation-in-string/
@@ -189,6 +189,76 @@ public class SlipWindow {
     }
 
 
+    /**
+     * https://leetcode-cn.com/problems/maximum-number-of-balloons/
+     */
+    public static int maxNumberOfBalloons(String text) {
+        String b = "balloon";
+        Map<Character, Integer> map = new HashMap<>();
+        for (int i = 0; i < text.length(); i++) {
+            if (b.indexOf(text.charAt(i)) != -1) {
+                map.put(text.charAt(i), map.getOrDefault(text.charAt(i), 0) + 1);
+            }
+        }
+        return Math.min(Integer.MAX_VALUE, Math.min(Math.min(Math.min(Math.min(map.getOrDefault('b', 0), map.getOrDefault('a', 0)), map.getOrDefault('l', 0) / 2), map.getOrDefault('o', 0) / 2), map.getOrDefault('n', 0)));
+    }
+
+    public static int maxNumberOfBalloons2(String text) {
+        char[] map = new char[5];
+        for (int i = 0; i < text.length(); i++) {
+            char charAt = text.charAt(i);
+            if (charAt == 'b') {
+                map[0]++;
+            } else if (charAt == 'a') {
+                map[1]++;
+            } else if (charAt == 'l') {
+                map[2]++;
+            } else if (charAt == 'o') {
+                map[3]++;
+            } else if (charAt == 'n') {
+                map[4]++;
+            }
+        }
+        map[2] /= 2;
+        map[3] /= 2;
+        int res = map[0];
+        for (int i = 0; i < 5; i++) {
+            res = Math.min(res, map[i]);
+        }
+        return res;
+    }
+
+
+    /**
+     * https://leetcode-cn.com/problems/maximum-average-subarray-i/
+     */
+    public static double findMaxAverage(int[] nums, int k) {
+        int sum = 0;
+        for (int i = 0; i < k; i++) {
+            sum += nums[i];
+        }
+        int maxSum = sum;
+        for (int i = 0; i < nums.length - k; i++) {
+            sum = sum - nums[i] + nums[i + k];
+            maxSum = Math.max(maxSum, sum);
+        }
+        return maxSum * 1.0 / k;
+    }
+
+    public static double findMaxAverage2(int[] nums, int k) {
+        int sum = 0;
+        for (int i = 0; i < k; i++) {
+            sum += nums[i];
+        }
+        int maxSum = sum;
+        for (int i = k; i < nums.length; i++) {
+            sum = sum + nums[i] - nums[i - k];
+            maxSum = Math.max(maxSum, sum);
+        }
+        return maxSum * 1.0 / k;
+    }
+
+
     public static void main(String[] args) {
         int[] arr = {1, 3, 5, 6};
         int i = searchInsert(arr, 3);
@@ -199,6 +269,9 @@ public class SlipWindow {
         System.out.println("aaaaacccccaaaaaccccccaaaaagggttt = " + aaaaacccccaaaaaccccccaaaaagggttt);
         String s1 = "adc", s2 = "dcda";
         System.out.println(checkInclusion2(s1, s2));
+        System.out.println(maxNumberOfBalloons2("leetcode"));
+        int[] ar2 = new int[]{4};
+        System.out.println(findMaxAverage(ar2, 1));
     }
 
 }
