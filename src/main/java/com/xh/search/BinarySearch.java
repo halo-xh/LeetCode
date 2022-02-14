@@ -12,11 +12,13 @@ public class BinarySearch {
 
     private final static int[] arr = new int[]{1, 2, 3, 4, 5, 6};
     private final static int[] arr1 = new int[]{1, 2, 3, 3, 4, 4, 5, 6};
-    private final static int[] arr2 = new int[]{4, 5, 6, 1, 2, 3};
+//    private final static int[] arr2 = new int[]{3,3,7,7,10,11,11};
+    private final static int[] arr2 = new int[]{1,1,2,3,3};
 
     public static void main(String[] args) {
         System.out.println(solution(4, arr1));
         System.out.println(solution2(4, arr1));
+        System.out.println(singleNonDuplicate(arr2));
     }
 
     /**
@@ -98,5 +100,31 @@ public class BinarySearch {
         return -1;
     }
 
+    /**
+     * 11 22 3 44 55
+     * 01 23 4 56 78
+     * 如果mid 为奇数
+     * https://leetcode-cn.com/problems/single-element-in-a-sorted-array/
+     */
+    public static int singleNonDuplicate(int[] nums) {
+        int left = 0, right = nums.length - 1;
+        while (left < right) {
+            int mid = left + ((right - left) >>> 1);
+            if ((mid & 1)== 0) {
+                if (mid + 1 <  nums.length && nums[mid] == nums[mid + 1]) {
+                    left = mid + 1;
+                } else {
+                    right=  mid;
+                }
+            } else {
+                if (mid - 1 >= 0 && nums[mid - 1] == nums[mid]) {
+                    left = mid + 1;
+                } else {
+                    right = mid;
+                }
+            }
+        }
+        return nums[right];
+    }
 
 }
