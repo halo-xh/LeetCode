@@ -34,6 +34,9 @@ public class NumberOfBoomerangs {
     }
 
 
+    /**
+     * https://leetcode-cn.com/problems/lucky-numbers-in-a-matrix/
+     */
     public List<Integer> luckyNumbers(int[][] matrix) {
         List<Integer> res = new ArrayList<>();
         for (int i = 0; i < matrix.length; i++) {
