@@ -1,6 +1,7 @@
 package com.xh.search;
 
 import java.text.BreakIterator;
+import java.util.HashMap;
 
 /**
  * author  Xiao Hong
@@ -19,6 +20,18 @@ public class BinarySearch {
         System.out.println(solution(4, arr1));
         System.out.println(solution2(4, arr1));
         System.out.println(singleNonDuplicate(arr2));
+
+        System.out.println("tableSizeFor(7) = " + tableSizeFor(3));
+    }
+
+    static final int tableSizeFor(int cap) {
+        int n = cap - 1;
+        n |= n >>> 1;
+        n |= n >>> 2;
+        n |= n >>> 4;
+        n |= n >>> 8;
+        n |= n >>> 16;
+        return (n < 0) ? 1 : (n >= Integer.MAX_VALUE) ? Integer.MAX_VALUE : n + 1;
     }
 
     /**
