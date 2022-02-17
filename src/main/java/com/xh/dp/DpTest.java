@@ -128,5 +128,37 @@ public class DpTest {
         return max;
     }
 
+    /**
+     * https://leetcode-cn.com/problems/knight-probability-in-chessboard/
+     */
+    private static final int[][] move = new int[][]{{-2, 1}, {-1, 2}, {1, 2}, {2, 1}, {2, -1}, {1, -2}, {-2, -1}, {-1, -2}};
+
+    public static double knightProbability(int n, int k, int row, int column) {
+        double[][][] f = new double[n][n][k + 1];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                f[i][j][0] = 1;
+            }
+        }
+        for (int m = 1; m <= k; m++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    for (int[] mv : move) {
+                        int x = i + mv[0], y = j + mv[1];
+                        if (x < 0 || x >= n || y < 0 || y >= n) {
+                            continue;
+                        }
+                        f[i][j][m] += (f[x][y][m - 1] / 8);
+                    }
+                }
+            }
+        }
+        return f[row][column][k];
+    }
+
+
+    public static void main(String[] args) {
+        System.out.println(knightProbability(3, 2, 0, 0));
+    }
 
 }
