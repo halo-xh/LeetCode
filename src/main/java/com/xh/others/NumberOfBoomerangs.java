@@ -1,7 +1,6 @@
 package com.xh.others;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * author  Xiao Hong
@@ -32,6 +31,35 @@ public class NumberOfBoomerangs {
             map.clear();
         }
         return ans;
+    }
+
+
+    /**
+     * https://leetcode-cn.com/problems/lucky-numbers-in-a-matrix/
+     */
+    public List<Integer> luckyNumbers(int[][] matrix) {
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < matrix.length; i++) {
+            int[] r = matrix[i];
+            int min = r[0], index = 0;
+            for (int j = 1; j < r.length; j++) {
+                if (min > r[j]) {
+                    min = r[j];
+                    index = j;
+                }
+            }
+            boolean found = true;
+            for (int k = 0; k < matrix.length; k++) {
+                if (k != i && matrix[k][index] > min) {
+                    found = false;
+                    break;
+                }
+            }
+            if (found){
+                res.add(min);
+            }
+        }
+        return res;
     }
 
 }

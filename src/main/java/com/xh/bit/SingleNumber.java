@@ -17,4 +17,17 @@ public class SingleNumber {
         }
         return b;
     }
+
+    /**
+     * https://leetcode-cn.com/problems/single-element-in-a-sorted-array/
+     */
+    public int singleNonDuplicate(int[] nums) {
+        int res = 0;
+        for (int num : nums) {
+            res ^= num;
+        }
+        return res;
+    }
+
+
 }
