@@ -1,5 +1,7 @@
 package com.xh.dfs;
 
+import com.xh.tree.TreeNode;
+
 import java.util.*;
 
 /**
@@ -73,11 +75,11 @@ public class CanFinish {
             inDegree[i1]++;
             List<Integer> list = map.getOrDefault(prerequisite[1], new ArrayList<>());
             list.add(i1);
-            map.put(prerequisite[1],list);
+            map.put(prerequisite[1], list);
         }
         LinkedList<Integer> stack = new LinkedList<>();
         for (int i = 0; i < inDegree.length; i++) {
-            if (inDegree[i] == 0){
+            if (inDegree[i] == 0) {
                 stack.push(i);
             }
         }
@@ -97,5 +99,18 @@ public class CanFinish {
         }
         return count == numCourses;
     }
+
+
+    // https://leetcode-cn.com/problems/path-sum/
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null) {
+            return false;
+        }
+        if (root.left == null && root.right == null) {
+            return targetSum == root.val;
+        }
+        return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val);
+    }
+
 
 }
