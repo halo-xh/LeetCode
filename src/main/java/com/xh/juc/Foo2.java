@@ -20,7 +20,7 @@ public class Foo2 {
     ReentrantLock lk = new ReentrantLock();
     Condition two = lk.newCondition();
     Condition three = lk.newCondition();
-
+    int c = 0 ;
 
     public Foo2() {
 
@@ -31,6 +31,7 @@ public class Foo2 {
         try {
             // printFirst.run() outputs "first". Do not change or remove this line.
             printFirst.run();
+            c++;
             two.signal();
         } finally {
             lk.unlock();
@@ -40,9 +41,12 @@ public class Foo2 {
     public void second(Runnable printSecond) throws InterruptedException {
         lk.lock();
         try {
-            two.await();
+            while (c != 1){
+                two.await();
+            }
             // printSecond.run() outputs "second". Do not change or remove this line.
             printSecond.run();
+            c++;
             three.signal();
         }finally {
             lk.unlock();
@@ -52,7 +56,9 @@ public class Foo2 {
     public void third(Runnable printThird) throws InterruptedException {
         lk.lock();
         try {
-            three.await();
+            while (c != 2) {
+                three.await();
+            }
             // printThird.run() outputs "third". Do not change or remove this line.
             printThird.run();
         }finally {

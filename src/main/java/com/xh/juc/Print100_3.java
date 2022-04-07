@@ -24,7 +24,7 @@ public class Print100_3 {
                 lock.lock();
                 try {
                     condition.signal();
-                    System.out.println(i);
+                    System.out.println("A -> "+i);
                     condition.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -39,7 +39,7 @@ public class Print100_3 {
                 lock.lock();
                 try {
                     condition.signal();
-                    System.out.println(i);
+                    System.out.println("B -> "+i);
                     condition.await();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -49,7 +49,6 @@ public class Print100_3 {
                 }
             }
         }).start();
-
     }
 
 
