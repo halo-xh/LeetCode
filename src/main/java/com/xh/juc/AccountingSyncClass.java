@@ -26,7 +26,7 @@ public class AccountingSyncClass implements Runnable {
 
         @Override
         public void run() {
-            for(int j=0;j<1000000;j++){
+            for(int j=0;j<10;j++){
                 increase();
             }
         }
