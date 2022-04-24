@@ -116,12 +116,25 @@ public class HammingWeight {
             arrSum += nums[i];
             f0 += (i * nums[i]);
         }
-        res  = f0;
+        res = f0;
         for (int i = 1; i < len; i++) {
             f0 += arrSum - len * nums[len - i];
             res = Math.max(res, f0);
         }
         return res;
+    }
+
+    //https://leetcode-cn.com/problems/binary-gap/submissions/
+    public int binaryGap(int n) {
+        int lastIdx = -1;
+        int max = 0;
+        for (int i = 0; i < 32; i++) {
+            if (((n >> i) & 1) == 1) {
+                lastIdx = i;
+            }
+            max = lastIdx == -1 ? 0 : Math.max(i - lastIdx,max);
+        }
+        return max;
     }
 
 }
