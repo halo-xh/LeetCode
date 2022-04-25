@@ -1,9 +1,8 @@
 package com.xh.others;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import com.xh.common.ListNode;
+
+import java.util.*;
 
 /**
  * author  Xiao Hong
@@ -14,7 +13,7 @@ import java.util.List;
 
 public class HammingWeight {
 
-    public static void main(String[] args) {
+    public static void main2(String[] args) {
         HammingWeight hammingWeight = new HammingWeight();
         System.out.println(hammingWeight.hammingWeight(3));
         String s = "loveleetcode";
@@ -30,10 +29,6 @@ public class HammingWeight {
         System.out.println("split = " + Arrays.toString(split));
 
         System.out.println(maxRotateFunction2(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}));
-        System.out.println("0 % 4 = " + 0 % 4);
-        System.out.println("1 % 4 = " + 1 % 4);
-        System.out.println("2 % 4 = " + 2 % 4);
-        System.out.println("3 % 4 = " + 3 % 4);
     }
 
     // you need to treat n as an unsigned value
@@ -132,9 +127,79 @@ public class HammingWeight {
             if (((n >> i) & 1) == 1) {
                 lastIdx = i;
             }
-            max = lastIdx == -1 ? 0 : Math.max(i - lastIdx,max);
+            max = lastIdx == -1 ? 0 : Math.max(i - lastIdx, max);
         }
         return max;
     }
 
+
+    //https://leetcode-cn.com/problems/random-pick-index/
+    class Solution {
+
+        HashMap<Integer, List<Integer>> map = new HashMap();
+        Random random = new Random();
+
+        public Solution(int[] nums) {
+            for (int i = 0; i < nums.length; i++) {
+                List<Integer> orDefault = map.getOrDefault(nums[i], new ArrayList<>());
+                orDefault.add(i);
+                map.put(nums[i], orDefault);
+            }
+        }
+
+        public int pick(int target) {
+            List<Integer> integers = map.get(target);
+            return integers.get(random.nextInt(integers.size()));
+        }
+    }
+
+    //https://leetcode-cn.com/problems/random-pick-index/  水塘抽样
+    class Solution2 {
+
+        int[] nums;
+
+        Random random = new Random();
+
+        public Solution2(int[] nums) {
+            this.nums = nums;
+        }
+
+        public int pick(int target) {
+            int ans = 0;
+            for (int i = 0, ct = 0; i < nums.length; i++) {
+                if (nums[i] == target) {
+                    ct++;
+                    if (random.nextInt(ct) == 0) {
+                        ans = i;
+                    }
+                }
+            }
+            return ans;
+        }
+    }
+
+
+    //https://leetcode-cn.com/problems/linked-list-random-node/
+    class Solution3 {
+
+        ListNode hd;
+        Random random = new Random();
+
+        public Solution3(ListNode head) {
+            this.hd = head;
+        }
+
+        public int getRandom() {
+            int ct = 0, res = 0;
+            ListNode node = hd;
+            while (node != null) {
+                ct++;
+                if (random.nextInt(ct) == 0) {
+                    res = node.val;
+                }
+                node = node.next;
+            }
+            return res;
+        }
+    }
 }
