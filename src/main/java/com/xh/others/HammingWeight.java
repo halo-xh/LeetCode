@@ -13,7 +13,7 @@ import java.util.*;
 
 public class HammingWeight {
 
-    public static void main2(String[] args) {
+    public static void main(String[] args) {
         HammingWeight hammingWeight = new HammingWeight();
         System.out.println(hammingWeight.hammingWeight(3));
         String s = "loveleetcode";
@@ -29,6 +29,9 @@ public class HammingWeight {
         System.out.println("split = " + Arrays.toString(split));
 
         System.out.println(maxRotateFunction2(new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}));
+        System.out.println("projectionArea(new int[][]{\n                {1,0},{0,2}\n        }) = " + projectionArea(new int[][]{
+                {1, 0}, {0, 2}
+        }));
     }
 
     // you need to treat n as an unsigned value
@@ -201,5 +204,25 @@ public class HammingWeight {
             }
             return res;
         }
+    }
+
+    /**
+     * https://leetcode-cn.com/problems/projection-area-of-3d-shapes/
+     */
+    public static int projectionArea(int[][] grid) {
+        int xy = 0, xz = 0, yz = 0;
+        for (int j = 0; j < grid.length; j++) {
+            int cMaxXz = 0, maxYz = 0;
+            for (int i = 0; i < grid[j].length; i++) {
+                if (grid[j][i] != 0) {
+                    xy++;
+                }
+                cMaxXz = Math.max(cMaxXz, grid[j][i]);
+                maxYz = Math.max(maxYz, grid[i][j]);
+            }
+            xz += cMaxXz;
+            yz += maxYz;
+        }
+        return xy + xz + yz;
     }
 }
