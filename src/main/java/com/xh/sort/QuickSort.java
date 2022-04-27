@@ -134,4 +134,45 @@ public class QuickSort {
         return min;
     }
 
+
+    /**
+     * 求交集
+     * https://leetcode-cn.com/problems/intersection-of-multiple-arrays/
+     */
+    public List<Integer> intersection(int[][] nums) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        List<Integer> res = new ArrayList<>();
+        for (int[] num : nums) {
+            for (int j : num) {
+                Integer orDefault = map.getOrDefault(j, 0);
+                map.put(j, ++orDefault);
+                if (orDefault == nums.length){
+                    res.add(j);
+                }
+            }
+        }
+        Collections.sort(res);
+        return res;
+    }
+
+
+    /**
+     *
+     */
+    public int countLatticePoints(int[][] circles) {
+        Set<List<Integer>> res = new HashSet<>();
+        for (int[] circle : circles) {
+            int r = circle[2];
+            int x = circle[0];
+            int y = circle[1];
+            for (int i = x - r; i <= x + r; i++) {
+                for (int j = y - r; j <= y + r; j++) {
+                    if (((x - i) * (x - i) + (y - j) * (y - j)) <= r * r) {
+                        res.add(Arrays.asList(i, j));
+                    }
+                }
+            }
+        }
+        return res.size();
+    }
 }
