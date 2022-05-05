@@ -25,9 +25,12 @@ public class ListNode {
 
     @Override
     public String toString() {
-        return "ListNode{" +
-                "val=" + val +
-                ", next=" + next +
-                '}';
+        ListNode n = next;
+        StringBuilder builder = new StringBuilder(" " + val);
+        while (n != null) {
+            builder.append(" -> ").append(n.val);
+            n = n.next;
+        }
+        return builder.toString();
     }
 }

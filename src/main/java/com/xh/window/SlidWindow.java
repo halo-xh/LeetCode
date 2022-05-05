@@ -302,8 +302,62 @@ public class SlidWindow {
         return res;
     }
 
+
+    //https://leetcode-cn.com/problems/subarray-product-less-than-k/
+    public static int numSubarrayProductLessThanK(int[] nums, int k) {
+        int left = 0, right = 0, res = 0;
+        while (left < nums.length) {
+            if (right >= nums.length) {
+                right = ++left;
+                if (left>=nums.length){
+                    return res;
+                }
+            }
+            if (left == right) {
+                if (nums[left] >= k) {
+                    right = ++left;
+                } else {
+                    res++;
+                    right++;
+                }
+            } else {
+                if (sumArr(left, right, nums) < k) {
+                    res++;
+                    right++;
+                } else {
+                    right = ++left;
+                }
+            }
+        }
+        return res;
+    }
+
+    private static int sumArr(int s, int e, int[] arr) {
+        int res = 1;
+        for (int i = s; i <= e; i++) {
+            res *= arr[i];
+        }
+        return res;
+    }
+
+    public int numSubarrayProductLessThanK2(int[] nums, int k) {
+        int n = nums.length, ans = 0;
+        if (k <= 1) {
+            return 0;
+        }
+        for (int i = 0, j = 0, cur = 1; i < n; i++) {
+            cur *= nums[i];
+            while (cur >= k) {
+                cur /= nums[j++];
+            }
+            ans += i - j + 1;
+        }
+        return ans;
+    }
+
+
     public static void main(String[] args) {
-        int[] arr = {1, 3, 5, 6};
+        int[] arr = {10, 5, 2, 6};
         int i = searchInsert(arr, 3);
         System.out.println("i = " + i);
         int abcabcbb = lengthOfLongestSubstring("abcabcbb");
@@ -313,10 +367,11 @@ public class SlidWindow {
         String s1 = "adc", s2 = "dcda";
         System.out.println(checkInclusion2(s1, s2));
         System.out.println(maxNumberOfBalloons2("leetcode"));
-        int[] ar2 = new int[]{1,3,-1,-3,5,3,6,7};
+        int[] ar2 = new int[]{1, 3, -1, -3, 5, 3, 6, 7};
         System.out.println(findMaxAverage2(ar2, 1));
         System.out.println(Arrays.toString(medianSlidingWindow2(ar2, 3)));
         System.out.println("(1&3) = " + (1 & 3));
+        System.out.println("numSubarrayProductLessThanK(arr, 100) = " + numSubarrayProductLessThanK(arr, 100));
     }
 
 }

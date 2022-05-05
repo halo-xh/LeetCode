@@ -2,6 +2,9 @@ package com.xh.linkedlist;
 
 import com.xh.common.ListNode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * author  Xiao Hong
  * date  2021/3/27 12:02
@@ -69,10 +72,6 @@ public class RotateRight {
         ListNode nHead = head.next;
         head.next = null;
         return nHead;
-//        作者：AC_OIer
-//        链接：https://leetcode-cn.com/problems/rotate-list/solution/kuai-man-zhi-zhen-ru-he-fen-bu-zou-jie-j-ns7u/
-//        来源：力扣（LeetCode）
-//        著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
     }
 
 

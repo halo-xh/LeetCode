@@ -16,6 +16,7 @@ public class QuickSort {
         //concatArray();
         System.out.println(Arrays.toString(quickSort(aa)));
         System.out.println(Arrays.toString(qs(aa, 0, aa.length - 1)));
+        System.out.println("sortArrayByParity(aa) = " + Arrays.toString(sortArrayByParity(aa)));
     }
 
     /**
@@ -146,7 +147,7 @@ public class QuickSort {
             for (int j : num) {
                 Integer orDefault = map.getOrDefault(j, 0);
                 map.put(j, ++orDefault);
-                if (orDefault == nums.length){
+                if (orDefault == nums.length) {
                     res.add(j);
                 }
             }
@@ -175,4 +176,22 @@ public class QuickSort {
         }
         return res.size();
     }
+
+
+    public static int[] sortArrayByParity(int[] nums) {
+        int m = 0, n = 0;
+        while (m < nums.length && n < nums.length) {
+            if ((nums[m] & 1) == 0 && m > n) {
+                int temp = nums[m];
+                nums[m] = nums[n];
+                nums[n] = temp;
+            }
+            if ((nums[n] & 1) == 0) {
+                n++;
+            }
+            m++;
+        }
+        return nums;
+    }
+
 }
