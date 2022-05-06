@@ -2,6 +2,10 @@ package com.xh.linkedlist;
 
 import com.xh.common.ListNode;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+
 //https://leetcode-cn.com/problems/intersection-of-two-linked-lists/
 public class IntersectionNode {
 
@@ -63,7 +67,42 @@ public class IntersectionNode {
      * https://leetcode-cn.com/problems/reverse-linked-list-ii/
      */
     public ListNode reverseBetween(ListNode head, int left, int right) {
-        return null;
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        ListNode leftNodePre = dummy;
+        for (int i = 0; i < left - 1; i++) {
+            leftNodePre = leftNodePre.next;
+        }
+        ListNode rightNode = dummy;
+        for (int i = 0; i < right; i++) {
+            rightNode = rightNode.next;
+        }
+        ListNode leftNode = leftNodePre.next;
+        ListNode rightNodeAfter = rightNode.next;
+        rightNode.next = null;
+        leftNodePre.next = null;
+        reverseList(leftNode);
+        leftNodePre.next = rightNode;
+        leftNode.next = rightNodeAfter;
+        return dummy.next;
+    }
+
+    public ListNode reverseBetween2(ListNode head, int left, int right) {
+        ListNode dummy = new ListNode();
+        dummy.next = head;
+        ListNode leftPre = dummy;
+        for (int i = 0; i < left - 1; i++) {
+            leftPre = leftPre.next;
+        }
+        ListNode cur = leftPre.next;
+        ListNode next;
+        for (int i = 0; i < right - left; i++) {
+            next = cur.next;
+            cur.next = next.next;
+            next.next = leftPre.next;
+            leftPre.next = next;
+        }
+        return dummy.next;
     }
 
 
@@ -140,6 +179,48 @@ public class IntersectionNode {
         return smaller.next;
     }
 
+
+    Map<Node, Node> nodeNodeMap = new HashMap<>();
+    //https://leetcode-cn.com/problems/copy-list-with-random-pointer/
+    public Node copyRandomList(Node head) {
+        if (head == null) {
+            return null;
+        }
+        if (!nodeNodeMap.containsKey(head)){
+            Node node = new Node(head.val);
+            nodeNodeMap.put(head,node);
+            node.next = copyRandomList(head.next);
+            node.random = copyRandomList(head.random);
+        }
+        return nodeNodeMap.get(head);
+    }
+
+    class Node {
+        int val;
+        Node next;
+        Node random;
+
+        public Node(int val) {
+            this.val = val;
+            this.next = null;
+            this.random = null;
+        }
+    }
+
+
+    // https://leetcode-cn.com/problems/linked-list-cycle-ii/
+    public ListNode detectCycle(ListNode head) {
+        HashSet<ListNode> set = new HashSet<>();
+        ListNode c = head;
+        while (c != null){
+            set.add(c);
+            c = c.next;
+            if (set.contains(c)){
+                return c;
+            }
+        }
+        return null;
+    }
 
     public static void main(String[] args) {
         ListNode node = new ListNode(1, new ListNode(4, new ListNode(3, new ListNode(0, new ListNode(5, new ListNode(2))))));
