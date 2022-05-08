@@ -181,14 +181,15 @@ public class IntersectionNode {
 
 
     Map<Node, Node> nodeNodeMap = new HashMap<>();
+
     //https://leetcode-cn.com/problems/copy-list-with-random-pointer/
     public Node copyRandomList(Node head) {
         if (head == null) {
             return null;
         }
-        if (!nodeNodeMap.containsKey(head)){
+        if (!nodeNodeMap.containsKey(head)) {
             Node node = new Node(head.val);
-            nodeNodeMap.put(head,node);
+            nodeNodeMap.put(head, node);
             node.next = copyRandomList(head.next);
             node.random = copyRandomList(head.random);
         }
@@ -212,14 +213,24 @@ public class IntersectionNode {
     public ListNode detectCycle(ListNode head) {
         HashSet<ListNode> set = new HashSet<>();
         ListNode c = head;
-        while (c != null){
+        while (c != null) {
             set.add(c);
             c = c.next;
-            if (set.contains(c)){
+            if (set.contains(c)) {
                 return c;
             }
         }
         return null;
+    }
+
+    // https://leetcode-cn.com/problems/reorder-list/
+    public void reorderList(ListNode head) {
+        if (head == null) {
+            return;
+        }
+        ListNode next = head.next;
+
+
     }
 
     public static void main(String[] args) {

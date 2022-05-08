@@ -1,6 +1,8 @@
 package com.xh.juc;
 
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Created by Xiao Hong on 2022-03-09
@@ -23,19 +25,37 @@ public class LimitedRun {
             }
         });
         thread.start();
-        TimeUnit.SECONDS.timedJoin(thread, 5);
+        TimeUnit.SECONDS.timedJoin(thread, 2);
         thread.interrupt();
 
-        Object o = new Object();
+        ReentrantLock reentrantLock = new ReentrantLock();
+        LinkedList<Integer> linkedList = new LinkedList<>();
+        // producer
         new Thread(() -> {
-            System.out.println("Thread.currentThread().getName() = " + Thread.currentThread().getName());
-            try {
-                Thread.currentThread().wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            int i = 0;
+            while (i < 1000) {
+                reentrantLock.lock();
+                System.out.println("producer get lock");
+                linkedList.push(i++);
+                System.out.println("producer add = " + i);
+                System.out.println("linkedList size = " + linkedList.size());
+                if (i % 100 == 0) {
+                    reentrantLock.unlock();
+                }
             }
         }).start();
-
-
+        // consumer
+        new Thread(() -> {
+            int consumed = 0;
+            while (consumed < 1000) {
+                reentrantLock.lock();
+                System.out.println("consumer get lock");
+                System.out.println("consumer = " + linkedList.pop());
+                consumed++;
+                if (linkedList.isEmpty()) {
+                    reentrantLock.unlock();
+                }
+            }
+        }).start();
     }
 }
