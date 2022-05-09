@@ -84,5 +84,26 @@ public class Test100 {
         return res;
     }
 
+    //https://leetcode.cn/problems/di-string-match/
+    public int[] diStringMatch(String s) {
+        int length = s.length();
+        int[] res = new int[length + 1];
+        int min = 0, max = length;
+        for (int i = 0, idx = 0; i < length; i++) {
+            if (s.charAt(i) == 'I') {
+                res[idx++] = min++;
+            } else {
+                res[idx++] = max--;
+            }
+        }
+        res[length] = min;
+        return res;
+    }
+
+    public static void main(String[] args) {
+        Test100 test100 = new Test100();
+        System.out.println(Arrays.toString(test100.diStringMatch("IDID")));
+    }
+
 
 }
