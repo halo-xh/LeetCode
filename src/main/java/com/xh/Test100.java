@@ -100,9 +100,25 @@ public class Test100 {
         return res;
     }
 
+    // https://leetcode.cn/problems/delete-columns-to-make-sorted/
+    public int minDeletionSize(String[] strs) {
+        int res = 0;
+        int length = strs[0].length();
+        out:for (int i = 0; i < length; i++) {
+            for (int j = 1; j < strs.length; j++) {
+                if (strs[j].charAt(i) < strs[j-1].charAt(i)) {
+                    res++;
+                    continue out;
+                }
+            }
+        }
+        return res;
+    }
+
     public static void main(String[] args) {
         Test100 test100 = new Test100();
         System.out.println(Arrays.toString(test100.diStringMatch("IDID")));
+        System.out.println("test100.minDeletionSize(new String[]{\"a\",\"b\"}) = " + test100.minDeletionSize(new String[]{"zyx","wvu","tsr"}));
     }
 
 
