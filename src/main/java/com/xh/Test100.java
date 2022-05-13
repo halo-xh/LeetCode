@@ -104,9 +104,10 @@ public class Test100 {
     public int minDeletionSize(String[] strs) {
         int res = 0;
         int length = strs[0].length();
-        out:for (int i = 0; i < length; i++) {
+        out:
+        for (int i = 0; i < length; i++) {
             for (int j = 1; j < strs.length; j++) {
-                if (strs[j].charAt(i) < strs[j-1].charAt(i)) {
+                if (strs[j].charAt(i) < strs[j - 1].charAt(i)) {
                     res++;
                     continue out;
                 }
@@ -115,10 +116,33 @@ public class Test100 {
         return res;
     }
 
+    //https://leetcode.cn/problems/one-away-lcci/
+    public boolean oneEditAway(String first, String second) {
+        int n = first.length(), m = second.length();
+        if (Math.abs(n - m) > 1) return false;
+        if (n > m) return oneEditAway(second, first);
+        int i = 0, j = 0, cnt = 0;
+        while (i < n && j < m && cnt <= 1) {
+            char c1 = first.charAt(i), c2 = second.charAt(j);
+            if (c1 == c2) {
+                i++; j++;
+            } else {
+                if (n == m) {
+                    i++; j++; cnt++;
+                } else {
+                    j++; cnt++;
+                }
+            }
+        }
+        return cnt <= 1;
+    }
+
+
     public static void main(String[] args) {
         Test100 test100 = new Test100();
         System.out.println(Arrays.toString(test100.diStringMatch("IDID")));
-        System.out.println("test100.minDeletionSize(new String[]{\"a\",\"b\"}) = " + test100.minDeletionSize(new String[]{"zyx","wvu","tsr"}));
+        System.out.println("test100.minDeletionSize(new String[]{\"a\",\"b\"}) = " + test100.minDeletionSize(new String[]{"zyx", "wvu", "tsr"}));
+        System.out.println("test100.oneEditAway(\"\",\"a\") = " + test100.oneEditAway("", "a"));
     }
 
 
