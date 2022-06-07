@@ -19,8 +19,9 @@ public class FindMin2 {
         System.out.println("5%$ = " + 5 % 4);
         ///[3,6,7,11], h = 8
         //[30,11,23,4,20], h = 5
-        int i = findMin.minEatingSpeed(new int[]{30,11,23,4,20}, 5);
-        System.out.println("i = " + i);
+        int i = findMin.minEatingSpeed(new int[]{30, 11, 23, 4, 20}, 5);
+        int i2 = findMin.minEatingSpeed(new int[]{312884470}, 312884469);
+        System.out.println("i = " + i2);
     }
 
     //O(n)
@@ -77,7 +78,7 @@ public class FindMin2 {
 
 
     /**
-     * https://leetcode.cn/problems/koko-eating-bananas/
+     * https://leetcode.cn/problems/koko-eating-bananas/ 二分最左？
      */
     public int minEatingSpeed(int[] piles, int h) {
         int min = 1, max = 1;
@@ -94,6 +95,25 @@ public class FindMin2 {
             }
         }
         return max;
+    }
+
+    public int minEatingSpeed2(int[] piles, int h) {
+        int min = 1, max = 1;
+        for (int pile : piles) {
+            max = Math.max(max, pile);
+        }
+        while (min <= max) {
+            int mid = min + ((max - min) >> 1);
+            int eat = eat(piles, mid);
+            if (eat > h) {
+                min = mid + 1;
+            } else if (eat < h) {
+                max = mid - 1;
+            } else {
+                return mid;
+            }
+        }
+        return min;
     }
 
     private int eat(int[] piles, int mid) {
