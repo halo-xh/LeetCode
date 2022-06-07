@@ -25,7 +25,9 @@ public class Print100_3 {
                 try {
                     condition.signal();
                     System.out.println("A -> "+i);
-                    condition.await();
+                    if ( i!= 100) {
+                        condition.await();
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
@@ -40,7 +42,9 @@ public class Print100_3 {
                 try {
                     condition.signal();
                     System.out.println("B -> "+i);
-                    condition.await();
+                    if (i != 99) {
+                        condition.await();
+                    }
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 } finally {
