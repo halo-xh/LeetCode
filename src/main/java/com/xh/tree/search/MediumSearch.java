@@ -3,10 +3,7 @@ package com.xh.tree.search;
 import com.xh.tree.Node;
 import com.xh.tree.TreeNode;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * @author xiaohong

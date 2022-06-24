@@ -233,11 +233,63 @@ public class IntersectionNode {
 
     }
 
+    /**
+     * https://leetcode-cn.com/problems/reorder-list/
+     */
+    public void reorderList2(ListNode head) {
+        if (head == null) {
+            return;
+        }
+        // 找中点
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        ListNode pre = null;
+        // 反转后半段
+        ListNode node = slow.next;
+        slow.next = null;
+        while (node != null) {
+            ListNode next = node.next;
+            node.next = pre;
+            pre = node;
+            node = next;
+        }
+        // 合并
+        // 1 2 3 4
+        // 5 6 7 8
+        // 1 5 2 6 3 7 4 8
+        ListNode l1 = head;
+        ListNode l2 = pre;
+        while (l1 != null && l2 != null){
+            ListNode next1 = l1.next;
+            ListNode next2 = l2.next;
+            l1.next = l2;
+            l2.next = l1.next;
+            l1 = next1;
+            l2 = next2;
+        }
+    }
+
     public static void main(String[] args) {
-        ListNode node = new ListNode(1, new ListNode(4, new ListNode(3, new ListNode(0, new ListNode(5, new ListNode(2))))));
+        ListNode l = new ListNode(1, new ListNode(4, new ListNode(3, new ListNode(0, new ListNode(5, new ListNode(2))))));
+        ListNode l22 = new ListNode(2, new ListNode(5, new ListNode(4, new ListNode(1, new ListNode(6, new ListNode(3))))));
 //        ListNode node = new ListNode(2, new ListNode(1));
-        IntersectionNode intersectionNode = new IntersectionNode();
-        System.out.println("intersectionNode.partition(node,2) = " + intersectionNode.partition(node, 2));
+//        IntersectionNode intersectionNode = new IntersectionNode();
+//        System.out.println("intersectionNode.partition(node,2) = " + intersectionNode.partition(node, 2));
+        ListNode l1 = l;
+        ListNode l2 = l22;
+        while (l1 != null && l2 != null){
+            ListNode next1 = l1.next;
+            ListNode next2 = l2.next;
+            l1.next = l2;
+            l2.next = l1.next;
+            l1 = next1;
+            l2 = next2;
+        }
+        System.out.println("l1 = " + l);
     }
 
 
