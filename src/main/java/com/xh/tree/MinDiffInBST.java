@@ -1,8 +1,6 @@
 package com.xh.tree;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * @author xiaohong
@@ -34,5 +32,36 @@ public class MinDiffInBST {
         return ans;
     }
 
+
+    /**
+     * https://leetcode.cn/problems/find-largest-value-in-each-tree-row/
+     */
+    public List<Integer> largestValues(TreeNode root) {
+        if (root == null) {
+            return Collections.emptyList();
+        }
+        ArrayDeque<TreeNode> arrayDeque = new ArrayDeque<>();
+        List<Integer> res = new ArrayList<>();
+        int levelSize = 1;
+        int max = Integer.MIN_VALUE;
+        arrayDeque.addLast(root);
+        while (!arrayDeque.isEmpty()) {
+            TreeNode pop = arrayDeque.pop();
+            max = Math.max(pop.val, max);
+            levelSize--;
+            if (pop.left != null) {
+                arrayDeque.addLast(pop.left);
+            }
+            if (pop.right != null) {
+                arrayDeque.addLast(pop.right);
+            }
+            if (levelSize == 0) {
+                res.add(max);
+                max = Integer.MIN_VALUE;
+                levelSize = arrayDeque.size();
+            }
+        }
+        return res;
+    }
 
 }
