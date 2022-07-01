@@ -142,63 +142,6 @@ public class Test100 {
         return cnt <= 1;
     }
 
-    // https://leetcode.cn/problems/binary-tree-paths/
-    public List<String> binaryTreePaths(TreeNode root) {
-        List<String> res = new ArrayList<>();
-        dfs(root, res, "");
-        return res;
-    }
-
-    private void dfs(TreeNode root, List<String> res, String path) {
-        if (root == null) {
-            return;
-        }
-        if (root.right == null && root.left == null) {
-            String s = path + "->" + root.val;
-            res.add(s.replaceFirst("->", ""));
-            return;
-        }
-        path += "->" + root.val;
-        dfs(root.left, res, path);
-        dfs(root.right, res, path);
-    }
-
-    //https://leetcode.cn/problems/binary-watch/
-    int[] h = new int[]{1, 2, 4, 8};
-    int[] m = new int[]{1, 2, 4, 8, 16, 32};
-    ArrayList<String> res = new ArrayList<>();
-
-    public List<String> readBinaryWatch(int turnedOn) {
-        dfs2(0, 0, 0, 0, 0, true);
-        return res;
-    }
-
-    private void dfs2(int hc, int hour, int minute, int hIdx, int Midx, boolean useH) {
-        if (hour > 11 || minute > 59) {
-            return;
-        }
-        res.add(hour + ":" + String.format("%02d", minute));
-        for (int i = 0; i < h.length; i++) {
-
-        }
-    }
-
-    //https://leetcode.cn/problems/sum-of-all-subset-xor-totals/
-    public int subsetXORSum(int[] nums) {
-        ArrayList<Integer> integers = new ArrayList<>();
-        dsf3(0, nums, integers);
-        return integers.stream().mapToInt(Integer::intValue).sum();
-    }
-
-    private void dsf3(int i, int[] nums, ArrayList<Integer> integers, int lastVal) {
-        if (i >= nums.length) {
-            return;
-        }
-        integers.add(i ^ lastVal);
-        for (int j = i; j < nums.length; j++) {
-            dsf3(i + 1, nums, integers);
-        }
-    }
 
     public static void main(String[] args) {
     }

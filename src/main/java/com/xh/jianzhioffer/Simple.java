@@ -430,8 +430,212 @@ public class Simple {
         return stack1.isEmpty();
     }
 
+    //https://leetcode.cn/problems/prime-arrangements/
+    public int numPrimeArrangements(int n) {
+        // 计算质数个数
+        int pct = 0;
+        for (int i = 1; i <= n; i++) {
+            if (isPrime(i)) {
+                pct++;
+            }
+        }
+        return (int) ((asa(pct) * asa(n - pct)) % mod);
+    }
+
+    private boolean isPrime(int i) {
+        if (i == 1) {
+            return false;
+        }
+        for (int j = 2; j * j <= i; j++) {
+            if ((i % j) == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    int mod = (int) (1e9 + 7);
+
+    private long asa(int a) {
+        long res = 1;
+        for (int i = 1; i <= a; i++) {
+            res = res * i % mod;
+        }
+        return res;
+    }
+
+    //https://leetcode.cn/problems/palindrome-linked-list/
+    //找到前半部分链表的尾节点。
+    //反转后半部分链表。
+    //判断是否回文。
+    //恢复链表。
+    //返回结果。
+    public boolean isPalindrome(ListNode head) {
+        ListNode mid = findMid(head);
+        ListNode last = reverseHalf(mid.next);
+        ListNode l = last;
+        boolean res = true;
+        ListNode p1 = head;
+        while (last != null && p1 != null) {
+            if (p1.val != last.val) {
+                res = false;
+                break;
+            }
+            last = last.next;
+            p1 = p1.next;
+        }
+        reverseHalf(l);
+        return res;
+    }
+
+    private ListNode reverseHalf(ListNode next) {
+        ListNode pre = null;
+        ListNode node = next;
+        while (node != null) {
+            ListNode listNode = node.next;
+            node.next = pre;
+            pre = node;
+            node = listNode;
+        }
+        return pre;
+    }
+
+    private ListNode findMid(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+
+    //https://leetcode.cn/problems/reverse-linked-list/
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode node = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return node;
+    }
+
+    //https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/
+    class Solution {
+        public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+            TreeNode ancestor = root;
+            while (true) {
+                if (p.val < ancestor.val && q.val < ancestor.val) {
+                    ancestor = ancestor.left;
+                } else if (p.val > ancestor.val && q.val > ancestor.val) {
+                    ancestor = ancestor.right;
+                } else {
+                    break;
+                }
+            }
+            return ancestor;
+        }
+    }
+
+    static boolean found = false;
+    static ArrayDeque<Integer> treeNodes = new ArrayDeque<>();
+
+    private static void dsf(TreeNode root, TreeNode p) {
+        if (root == null) {
+            if (!treeNodes.isEmpty()) {
+                treeNodes.removeLast();
+            }
+            return;
+        }
+        treeNodes.addLast(root.val);
+        if (root.val == p.val) {
+            found = true;
+            return;
+        }
+        dsf(root.left, p);
+        if (found) {
+            return;
+        }
+        dsf(root.right, p);
+        if (found) {
+            return;
+        }
+        if (root.val != p.val) {
+            if (!treeNodes.isEmpty()) {
+                treeNodes.removeLast();
+            }
+        }
+    }
+
+    // https://leetcode.cn/problems/binary-tree-paths/
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> res = new ArrayList<>();
+        dfs(root, res, "");
+        return res;
+    }
+
+    private void dfs(TreeNode root, List<String> res, String path) {
+        if (root == null) {
+            return;
+        }
+        if (root.right == null && root.left == null) {
+            String s = path + "->" + root.val;
+            res.add(s.replaceFirst("->", ""));
+            return;
+        }
+        path += "->" + root.val;
+        dfs(root.left, res, path);
+        dfs(root.right, res, path);
+    }
+
+    //https://leetcode.cn/problems/binary-watch/
+    int[] h = new int[]{1, 2, 4, 8};
+    int[] m = new int[]{1, 2, 4, 8, 16, 32};
+    ArrayList<String> res = new ArrayList<>();
+    int total = 0;
+
+    public List<String> readBinaryWatch(int turnedOn) {
+        total = turnedOn;
+        dfs2(0, 0, 0, 0, 0);
+        return res;
+    }
+
+    private void dfs2(int used, int idx, int idxy, int minute, int hour) {
+        if (hour > 11 || minute > 59) {
+            return;
+        }
+        if (used == total) {
+            res.add(hour + ":" + String.format("%02d", minute));
+            return;
+        }
+        ++used;
+        hour += h[++idx];
+        minute += m[++idxy];
+        dfs2(used, idx, idxy, minute, hour);
+    }
+
+    //https://leetcode.cn/problems/sum-of-all-subset-xor-totals/
+
+
     public static void main(String[] args) {
-        System.out.println("containsNearbyDuplicate(new int[]{1,2,3,1,2,3},2) = " + containsNearbyDuplicate(new int[]{1, 2, 1}, 0));
+
+        TreeNode treeNode =
+                new TreeNode(1,
+                        new TreeNode(2,
+                                new TreeNode(3,
+                                        new TreeNode(4,
+                                                new TreeNode(7,
+                                                        new TreeNode(9),
+                                                        new TreeNode(17)),
+                                                new TreeNode(10)),
+                                        new TreeNode(13)),
+                                new TreeNode(14)),
+                        new TreeNode(11));
+
+        dsf(treeNode, new TreeNode(13));
+        System.out.println(treeNodes);
     }
 
 
