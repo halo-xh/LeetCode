@@ -736,6 +736,47 @@ public class Simple {
     }
 
 
+    //https://leetcode.cn/problems/generate-parentheses/
+    public List<String> generateParenthesis(int n) {
+        ArrayList<String> res = new ArrayList<>();
+        dfsGenerateParenthesis(n, 0, 0, new StringBuilder(), res);
+        return res;
+    }
+
+    private void dfsGenerateParenthesis(int max, int left, int right, StringBuilder s, ArrayList<String> res) {
+        if (max * 2 == s.length()) {
+            res.add(s.toString());
+            return;
+        }
+        if (left < max) {
+            s.append("(");
+            dfsGenerateParenthesis(max, left + 1, right, s, res);
+            s.deleteCharAt(s.length() - 1);
+        }
+        if (right < left) {
+            s.append(")");
+            dfsGenerateParenthesis(max, left, right + 1, s, res);
+            s.deleteCharAt(s.length() - 1);
+        }
+    }
+
+    //为了检查序列是否有效，我们遍历这个序列，并使用一个变量 balance 表示左括号的数量减去右括号的数量。
+    // 如果在遍历过程中balance 的值小于零，或者结束时balance 的值不为零，那么该序列就是无效的，否则它是有效的。
+    public boolean valid(char[] current) {
+        int balance = 0;
+        for (char c : current) {
+            if (c == '(') {
+                ++balance;
+            } else {
+                --balance;
+            }
+            if (balance < 0) {
+                return false;
+            }
+        }
+        return balance == 0;
+    }
+
     public static void main(String[] args) {
         Simple simple = new Simple();
 //        TreeNode treeNode =
