@@ -694,9 +694,7 @@ public class Simple {
 //        System.out.println(simple.readBinaryWatch(2));
         int[] nums = {5, 1, 6};
         int sum = simple.subsetXORSum(nums);
-        int sum2 = simple.subsetXORSum2(nums);
         System.out.println("sum = " + sum);
-        System.out.println("sum2 = " + sum2);
 
 
     }
