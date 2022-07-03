@@ -591,51 +591,114 @@ public class Simple {
     }
 
     //https://leetcode.cn/problems/binary-watch/
-    int[] h = new int[]{1, 2, 4, 8};
-    int[] m = new int[]{1, 2, 4, 8, 16, 32};
+    int[] lt = new int[]{1, 2, 4, 8, 1, 2, 4, 8, 16, 32};
+    int[] ht = new int[]{1, 2, 4, 8};
+    int[] mt = new int[]{1, 2, 4, 8, 16, 32};
+    int turnedOn = 0;
     ArrayList<String> res = new ArrayList<>();
-    int total = 0;
 
     public List<String> readBinaryWatch(int turnedOn) {
-        total = turnedOn;
-        dfs2(0, 0, 0, 0, 0);
+        this.turnedOn = turnedOn;
+//        dfs2(0, 0, 0, 0);
+        dfs3(0, 0, 0, 0, 0, false);
         return res;
     }
 
-    private void dfs2(int used, int idx, int idxy, int minute, int hour) {
-        if (hour > 11 || minute > 59) {
+    private void dfs2(int ct, int idx, int hour, int minute) {
+        if (ct > turnedOn) {
             return;
         }
-        if (used == total) {
-            res.add(hour + ":" + String.format("%02d", minute));
+        if (ct == turnedOn) {
+//          res.add(hour + ":" + String.format("%02d", minute));  这个看着很爽. 会导致慢很多. 17 ms
+//          res.add(String.valueOf(hour) + ':' + ((minute < 10) ? "0" : "") + minute); 这个看着很爽. 也会慢. 9 ms
+            StringBuilder sb = new StringBuilder();
+            sb.append(hour).append(':');
+            if (minute < 10) {
+                sb.append('0');
+            }
+            sb.append(minute);
+            res.add(sb.toString());
             return;
         }
-        ++used;
-        hour += h[++idx];
-        minute += m[++idxy];
-        dfs2(used, idx, idxy, minute, hour);
+        for (int i = idx; i < lt.length; i++) {
+            if (i <= 3) {
+                int newHour = hour + lt[i];
+                if (newHour > 11) {
+                    continue;
+                }
+                dfs2(ct + 1, i + 1, newHour, minute);
+            } else {
+                int newMinute = minute + lt[i];
+                if (newMinute > 59) {
+                    continue;
+                }
+                dfs2(ct + 1, i + 1, hour, newMinute);
+            }
+        }
     }
 
-    //https://leetcode.cn/problems/sum-of-all-subset-xor-totals/
+    private void dfs3(int ct, int hdx, int mdx, int hour, int minute, boolean finishedH) {
+        if (ct > turnedOn || hour > 11 || minute > 59) {
+            return;
+        }
+        if (ct == turnedOn) {
+            res.add(String.valueOf(hour) + ':' + ((minute < 10) ? "0" : "") + minute);
+            return;
+        }
+        for (int i = hdx; i < ht.length && !finishedH; i++) {
+            int newHour = hour + ht[i];
+            dfs3(ct + 1, i + 1, mdx, newHour, minute, false);
+        }
+        for (int i = mdx; i < mt.length; i++) {
+            int newMinute = minute + mt[i];
+            if (newMinute > 59) {
+                continue;
+            }
+            dfs3(ct + 1, hdx, i + 1, hour, newMinute, true);
+        }
+    }
 
+
+    //https://leetcode.cn/problems/sum-of-all-subset-xor-totals/
+    int ress = 0;
+
+    public int subsetXORSum(int[] nums) {
+        dfs(nums, 0, 0);
+        return ress;
+    }
+
+    private void dfs(int[] nums, int idx, int val) {
+        ress += val;
+        for (int i = idx; i < nums.length; i++) {
+            dfs(nums, i + 1, val ^ nums[i]);
+        }
+    }
 
     public static void main(String[] args) {
+        Simple simple = new Simple();
+//        TreeNode treeNode =
+//                new TreeNode(1,
+//                        new TreeNode(2,
+//                                new TreeNode(3,
+//                                        new TreeNode(4,
+//                                                new TreeNode(7,
+//                                                        new TreeNode(9),
+//                                                        new TreeNode(17)),
+//                                                new TreeNode(10)),
+//                                        new TreeNode(13)),
+//                                new TreeNode(14)),
+//                        new TreeNode(11));
+//
+//        dsf(treeNode, new TreeNode(13));
+//        System.out.println(treeNodes);
+//        System.out.println(simple.readBinaryWatch(2));
+        int[] nums = {5, 1, 6};
+        int sum = simple.subsetXORSum(nums);
+        int sum2 = simple.subsetXORSum2(nums);
+        System.out.println("sum = " + sum);
+        System.out.println("sum2 = " + sum2);
 
-        TreeNode treeNode =
-                new TreeNode(1,
-                        new TreeNode(2,
-                                new TreeNode(3,
-                                        new TreeNode(4,
-                                                new TreeNode(7,
-                                                        new TreeNode(9),
-                                                        new TreeNode(17)),
-                                                new TreeNode(10)),
-                                        new TreeNode(13)),
-                                new TreeNode(14)),
-                        new TreeNode(11));
 
-        dsf(treeNode, new TreeNode(13));
-        System.out.println(treeNodes);
     }
 
 
