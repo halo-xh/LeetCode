@@ -674,6 +674,68 @@ public class Simple {
         }
     }
 
+    //https://leetcode.cn/problems/UEcfPD/
+    int max = -1;
+    int limit = 0;
+    int[][] attribute = null;
+    int[][] cookbooks = null;
+
+    public int perfectMenu(int[] materials, int[][] cookbooks, int[][] attribute, int limit) {
+        this.limit = limit;
+        this.attribute = attribute;
+        this.cookbooks = cookbooks;
+        dfsPerfectMenu(materials, 0, 0, 0);
+        return max;
+    }
+
+    private void dfsPerfectMenu(int[] materials, int idx, int nl, int r) {
+        if (nl >= limit && idx == cookbooks.length) {
+            max = Math.max(max, r);
+        }
+        for (int i = idx; i < cookbooks.length; i++) {
+            int a1 = cookbooks[i][0];
+            int a2 = cookbooks[i][1];
+            int a3 = cookbooks[i][2];
+            int a4 = cookbooks[i][3];
+            int a5 = cookbooks[i][4];
+            int m1 = materials[0] - a1;
+            int m2 = materials[1] - a2;
+            int m3 = materials[2] - a3;
+            int m4 = materials[3] - a4;
+            int m5 = materials[4] - a5;
+            if (m1 >= 0 && m2 >= 0 && m3 >= 0 && m4 >= 0 && m5 >= 0) {
+                dfsPerfectMenu(new int[]{m1, m2, m3, m4, m5}, i + 1, nl + attribute[i][1], r + attribute[i][0]);
+                dfsPerfectMenu(materials, i + 1, nl, r);
+            }
+        }
+    }
+
+    //https://leetcode.cn/problems/letter-case-permutation/
+    public List<String> letterCasePermutation(String s) {
+        ArrayList<String> res = new ArrayList<>();
+        char[] chars = s.toCharArray();
+        dsfLetterCasePermutation(chars, 0, res);
+        return res;
+    }
+
+    private void dsfLetterCasePermutation(char[] chars, int idx, ArrayList<String> res) {
+        res.add(new String(chars));
+        for (int i = idx; i < chars.length; i++) {
+            if (Character.isLetter(chars[i])) {
+                if (Character.isUpperCase(chars[i])) {
+                    chars[i] = Character.toLowerCase(chars[i]);
+                    dsfLetterCasePermutation(chars, i + 1, res);
+                    chars[i] = Character.toUpperCase(chars[i]);
+                } else {
+                    chars[i] = Character.toUpperCase(chars[i]);
+                    dsfLetterCasePermutation(chars, i + 1, res);
+                    chars[i] = Character.toLowerCase(chars[i]);
+                }
+            }
+        }
+    }
+
+
     public static void main(String[] args) {
         Simple simple = new Simple();
 //        TreeNode treeNode =
@@ -695,7 +757,7 @@ public class Simple {
         int[] nums = {5, 1, 6};
         int sum = simple.subsetXORSum(nums);
         System.out.println("sum = " + sum);
-
+        System.out.println(simple.letterCasePermutation("a1b2"));
 
     }
 
