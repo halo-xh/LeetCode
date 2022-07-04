@@ -777,29 +777,89 @@ public class Simple {
         return balance == 0;
     }
 
+    //https://leetcode.cn/problems/all-paths-from-source-to-target/
+    public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
+        List<List<Integer>> res = new ArrayList<>();
+        LinkedList<Integer> list = new LinkedList<>();
+        list.addLast(0);
+        dfsAllPathsSourceTarget(res, graph, 0, list);
+        return res;
+    }
+
+    private void dfsAllPathsSourceTarget(List<List<Integer>> res, int[][] graph, int idx, LinkedList<Integer> cur) {
+        if (cur.getLast() == graph.length - 1) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        int[] ints = graph[idx];
+        for (int anInt : ints) {
+            cur.addLast(anInt);
+            dfsAllPathsSourceTarget(res, graph, anInt, cur);
+            cur.removeLast();
+        }
+    }
+
+    //https://leetcode.cn/problems/combination-sum-iii/
+    int[] arr = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> res = new ArrayList<>();
+        LinkedList<Integer> list = new LinkedList<>();
+        dfsCombinationSum3(res, 0, list, k, n);
+        return res;
+    }
+
+    private void dfsCombinationSum3(List<List<Integer>> res, int idx, LinkedList<Integer> list, int ct, int remain) {
+        if (ct == 0 && remain == 0) {
+            res.add(new ArrayList<>(list));
+            return;
+        }
+        for (int i = idx; i < arr.length; i++) {
+            int r = remain - arr[i];
+            if (r < 0) {
+                break;
+            }
+            list.addLast(arr[i]);
+            dfsCombinationSum3(res, i + 1, list, ct - 1, remain - arr[i]);
+            list.removeLast();
+        }
+    }
+
+    //https://leetcode.cn/problems/combination-sum/
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        List<List<Integer>> res = new ArrayList<>();
+        LinkedList<Integer> list = new LinkedList<>();
+        dfsCombinationSum(res, candidates, 0, list, target);
+        return res;
+    }
+
+    private void dfsCombinationSum(List<List<Integer>> res, int[] candidates, int idx, LinkedList<Integer> list, int target) {
+        if (target == 0) {
+            res.add(new ArrayList<>(list));
+            return;
+        }
+        for (int i = idx; i < candidates.length; i++) {
+            int reamin = target - candidates[i];
+            if (reamin < 0) {
+                break;
+            }
+            list.addLast(candidates[i]);
+            dfsCombinationSum(res, candidates, i, list, reamin);
+            list.removeLast();
+        }
+    }
+
+
     public static void main(String[] args) {
         Simple simple = new Simple();
-//        TreeNode treeNode =
-//                new TreeNode(1,
-//                        new TreeNode(2,
-//                                new TreeNode(3,
-//                                        new TreeNode(4,
-//                                                new TreeNode(7,
-//                                                        new TreeNode(9),
-//                                                        new TreeNode(17)),
-//                                                new TreeNode(10)),
-//                                        new TreeNode(13)),
-//                                new TreeNode(14)),
-//                        new TreeNode(11));
-//
-//        dsf(treeNode, new TreeNode(13));
-//        System.out.println(treeNodes);
-//        System.out.println(simple.readBinaryWatch(2));
-        int[] nums = {5, 1, 6};
+        int[] nums = {2, 3, 5};
         int sum = simple.subsetXORSum(nums);
         System.out.println("sum = " + sum);
         System.out.println(simple.letterCasePermutation("a1b2"));
-
+        System.out.println(simple.combinationSum3(3, 7));
+        System.out.println(simple.combinationSum(nums, 8));
     }
 
 
