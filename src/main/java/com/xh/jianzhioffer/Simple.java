@@ -777,6 +777,202 @@ public class Simple {
         return balance == 0;
     }
 
+    // https://leetcode.cn/problems/different-ways-to-add-parentheses/
+    public List<Integer> diffWaysToCompute(String expression) {
+        char[] chars = expression.toCharArray();
+        return dfsDiffWaysToCompute(chars, 0, chars.length);
+    }
+
+    private List<Integer> dfsDiffWaysToCompute(char[] chars, int l, int r) {
+        ArrayList<Integer> res = new ArrayList<>();
+        for (int i = l; i < r; i++) {
+            char c = chars[i];
+            if (c == '-' || c == '+' || c == '*') {
+                List<Integer> lres = dfsDiffWaysToCompute(chars, l, i);
+                List<Integer> rres = dfsDiffWaysToCompute(chars, i + 1, r);
+                for (Integer lre : lres) {
+                    for (Integer rre : rres) {
+                        if (c == '-') {
+                            res.add(lre - rre);
+                        } else if (c == '+') {
+                            res.add(lre + rre);
+                        } else {
+                            res.add(lre * rre);
+                        }
+                    }
+                }
+            }
+        }
+        if (res.isEmpty()) {
+            res.add(Integer.valueOf(new String(Arrays.copyOfRange(chars, l, r))));
+        }
+        return res;
+    }
+
+    //https://leetcode.cn/problems/minimum-absolute-difference/
+    public List<List<Integer>> minimumAbsDifference(int[] arr) {
+        Arrays.sort(arr);
+        ArrayList<List<Integer>> res = new ArrayList<>();
+        int min = Integer.MAX_VALUE;
+        for (int i = 1; i < arr.length; i++) {
+            if ((arr[i] - arr[i - 1]) < min) {
+                res.clear();
+                min = arr[i] - arr[i - 1];
+                res.add(Arrays.asList(arr[i - 1], arr[i]));
+            } else if (arr[i] - arr[i - 1] == min) {
+                res.add(Arrays.asList(arr[i - 1], arr[i]));
+            }
+        }
+        return res;
+    }
+
+    //https://leetcode.cn/problems/combination-sum/
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        ArrayList<List<Integer>> res = new ArrayList<>();
+        dfsCombinationSum(candidates, res, new LinkedList<>(), target, 0);
+        return res;
+    }
+
+    private void dfsCombinationSum(int[] candidates, ArrayList<List<Integer>> res, LinkedList<Integer> cur, int sum, int idx) {
+        if (sum == 0) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int i = idx; i < candidates.length; i++) {
+            int candidate = candidates[i];
+            cur.addLast(candidate);
+            dfsCombinationSum(candidates, res, cur, sum - candidate, i);
+            cur.removeLast();
+        }
+    }
+
+    //https://leetcode.cn/problems/combination-sum-ii/
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        ArrayList<List<Integer>> res = new ArrayList<>();
+        dfsCombinationSum2(candidates, res, new LinkedList<>(), target, 0);
+        return res;
+    }
+
+    private void dfsCombinationSum2(int[] candidates, ArrayList<List<Integer>> res, LinkedList<Integer> cur, int sum, int idx) {
+        if (sum < 0) {
+            return;
+        }
+        if (sum == 0) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int i = idx; i < candidates.length; i++) {
+            int candidate = candidates[i];
+            // 从小到达排序 所以后面的只会更大，不符合条件 所以直接就break
+            if (sum - candidate < 0) {
+                break;
+            }
+            //。
+            if (i > idx && candidates[i] == candidates[i - 1]) {
+                continue;
+            }
+            cur.addLast(candidate);
+            dfsCombinationSum2(candidates, res, cur, sum - candidate, i + 1);
+            cur.removeLast();
+        }
+    }
+
+    //https://leetcode.cn/problems/combinations/
+    public List<List<Integer>> combine(int n, int k) {
+        ArrayList<List<Integer>> res = new ArrayList<>();
+        dfsCcombine(n, k, 1, res, new LinkedList<>());
+        return res;
+    }
+
+    private void dfsCcombine(int n, int k, int i, ArrayList<List<Integer>> res, LinkedList<Integer> cur) {
+        if (cur.size() == k) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int j = i; j <= n; j++) {
+            cur.addLast(j);
+            dfsCcombine(n, k, j + 1, res, cur);
+            cur.removeLast();
+        }
+    }
+
+    //https://leetcode.cn/problems/subsets/
+    public List<List<Integer>> subsets(int[] nums) {
+        ArrayList<List<Integer>> res = new ArrayList<>();
+        dfsSubsets(nums, 0, res, new LinkedList<Integer>());
+        return res;
+    }
+
+    private void dfsSubsets(int[] nums, int i, ArrayList<List<Integer>> res, LinkedList<Integer> cur) {
+        res.add(new ArrayList<>(cur));
+        for (int j = i; j < nums.length; j++) {
+            cur.addLast(nums[j]);
+            dfsSubsets(nums, j + 1, res, cur);
+            cur.removeLast();
+        }
+    }
+
+    //https://leetcode.cn/problems/gray-code/
+    int nn2 = 0;
+
+    public List<Integer> grayCode(int n) {
+        ArrayList<List<Integer>> res = new ArrayList<>();
+        this.nn2 = n;
+        dfsGrayCode(0, new LinkedList<>(), res);
+        return null;
+    }
+
+    private void dfsGrayCode(int i, LinkedList<Integer> integers, List<List<Integer>> res) {
+        if (integers.size() == (2 << (nn2 - 1))) {
+            res.add(new ArrayList<>(integers));
+            return;
+        }
+        for (int j = i; j <= ((2 << (nn2 - 1)) - 1) && !found; j++) {
+            if (!integers.isEmpty() && !oneBitDiff(integers.getLast(), j)) {
+                break;
+            }
+            integers.add(j);
+            dfsGrayCode(j + 1, integers, res);
+            integers.removeLast();
+        }
+    }
+
+    private static boolean oneBitDiff(int a, int b) {
+        int c = a & b;
+        return c != 0 && (c & (c - 1)) == 0;
+    }
+
+    //https://leetcode.cn/problems/permutations-ii/
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        ArrayList<List<Integer>> res = new ArrayList<>();
+        vst = new boolean[nums.length];
+        Arrays.sort(nums);
+        dfsPermuteUnique(0, new LinkedList<Integer>(), nums, res);
+        return res;
+    }
+
+    boolean[] vst = null;
+
+    private void dfsPermuteUnique(int idx, LinkedList<Integer> cur, int[] nums, ArrayList<List<Integer>> res) {
+        if (idx == nums.length) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+            if (vst[i]  || (i > 0 && num == nums[i - 1] && !vst[i-1])) {
+                continue;
+            }
+            cur.addLast(num);
+            vst[i] = true;
+            dfsPermuteUnique(idx + 1, cur, nums, res);
+            vst[i] = false;
+            cur.removeLast();
+        }
+    }
+
+
     //https://leetcode.cn/problems/all-paths-from-source-to-target/
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
         List<List<Integer>> res = new ArrayList<>();
@@ -858,6 +1054,14 @@ public class Simple {
         int sum = simple.subsetXORSum(nums);
         System.out.println("sum = " + sum);
         System.out.println(simple.letterCasePermutation("a1b2"));
+        System.out.println("int '3' = " + ('3' - '0'));
+        System.out.println("simple.diffWaysToCompute(\"11\") = " + simple.diffWaysToCompute("11"));
+        System.out.println(simple.combinationSum2(new int[]{10, 1, 2, 7, 6, 1, 1, 5}, 3));
+        System.out.println(simple.combine(4, 2));
+        System.out.println(simple.subsets(nums));
+        System.out.println(simple.grayCode(2));
+        System.out.println(simple.permuteUnique(new int[]{1,1,2}));
+
         System.out.println(simple.combinationSum3(3, 7));
         System.out.println(simple.combinationSum(nums, 8));
     }
