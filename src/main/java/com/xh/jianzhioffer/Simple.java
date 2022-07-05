@@ -961,7 +961,7 @@ public class Simple {
         }
         for (int i = 0; i < nums.length; i++) {
             int num = nums[i];
-            if (vst[i]  || (i > 0 && num == nums[i - 1] && !vst[i-1])) {
+            if (vst[i] || (i > 0 && num == nums[i - 1] && !vst[i - 1])) {
                 continue;
             }
             cur.addLast(num);
@@ -1051,19 +1051,16 @@ public class Simple {
     public static void main(String[] args) {
         Simple simple = new Simple();
         int[] nums = {2, 3, 5};
-        int sum = simple.subsetXORSum(nums);
-        System.out.println("sum = " + sum);
+        System.out.println(simple.subsetXORSum(nums));
         System.out.println(simple.letterCasePermutation("a1b2"));
-        System.out.println("int '3' = " + ('3' - '0'));
-        System.out.println("simple.diffWaysToCompute(\"11\") = " + simple.diffWaysToCompute("11"));
+        System.out.println(simple.diffWaysToCompute("11"));
         System.out.println(simple.combinationSum2(new int[]{10, 1, 2, 7, 6, 1, 1, 5}, 3));
         System.out.println(simple.combine(4, 2));
         System.out.println(simple.subsets(nums));
         System.out.println(simple.grayCode(2));
-        System.out.println(simple.permuteUnique(new int[]{1,1,2}));
-
+        System.out.println(simple.permuteUnique(new int[]{1, 1, 2}));
         System.out.println(simple.combinationSum3(3, 7));
-        System.out.println(simple.combinationSum(nums, 8));
+        System.out.println(simple.combinationSum4(nums, 8));
     }
 
 
