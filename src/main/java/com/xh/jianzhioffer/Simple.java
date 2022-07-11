@@ -1084,6 +1084,15 @@ public class Simple {
     }
 
 
+    //https://leetcode.cn/problems/minimum-cost-to-move-chips-to-the-same-position/
+    public int minCostToMoveChips(int[] ps) {
+        int n = ps.length, a = 0;
+        for (int i : ps) {
+            a += (i & 1);
+        }
+        return Math.min(a, n - a);
+    }
+
     public static void main(String[] args) {
         Simple simple = new Simple();
         int[] nums = new int[]{2, 3, 5};
