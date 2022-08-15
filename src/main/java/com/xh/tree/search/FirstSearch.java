@@ -38,7 +38,7 @@ public class FirstSearch {
         Stack<TreeNode> stack = new Stack<>();
         stack.push(root);
         TreeNode node = root;
-        while (!stack.isEmpty() || node != null) {
+        while (!stack.isEmpty()) {
             while (node != null) {
                 list.add(node.val);
                 stack.push(node);
