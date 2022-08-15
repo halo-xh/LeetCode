@@ -25,35 +25,82 @@ package com.xh.dp;
 public class ZuiChangHuiWen {
 
     public static void main(String[] args) {
-        System.out.println(longestPalindrome("bbcbbd"));
+        System.out.println(longestPalindrome2("babad"));
 
     }
 
     public static String longestPalindrome(String s) {
         char[] chars = s.toCharArray();
-        int len = chars.length;
-        if (len == 0) {
-            return s;
-        }
-        int max = 1;
-        int start = 0;
-        boolean[][] dp = new boolean[len][len];
-        for (int i = 0; i < len; i++) {
+        int max = 1, start = 0;
+        boolean[][] dp = new boolean[chars.length][chars.length];
+        for (int i = 0; i < chars.length; i++) {
             dp[i][i] = true;
         }
-        for (int i = 1; i < chars.length; i++) {
-            for (int j = 0; j < i; j++) {
-                if (chars[i] == chars[j] && (dp[j + 1][i - 1] || i - j < 3)) {
-                    dp[j][i] = true;
-                    if ((i - j + 1) > max) {
-                        max = i - j + 1;
-                        start = j;
+        // sLen 字串长度
+        for (int sLen = 2; sLen <= chars.length; sLen++) {
+            // i 左边起点
+            for (int i = 0; i < chars.length; i++) {
+                // 根据 r - i + 1 = sLen 算出右边索引
+                int r = sLen + i - 1;
+                // 判断
+                if (r >= chars.length) {
+                    break;
+                }
+                // 如果左右相同
+                if (chars[i] == chars[r]) {
+                    // 长度在3之下 直接true
+                    if (r - i < 3) {
+                        dp[i][r] = true;
+                    } else {
+                        // 否则取决于除去左右端点的中间串是否为回文
+                        dp[i][r] = dp[i + 1][r - 1];
                     }
                 } else {
-                    dp[j][i] = false;
+                    // 不同直接false
+                    dp[i][r] = false;
+                }
+                // 尝试更新最大
+                if (dp[i][r] && sLen > max) {
+                    start = i;
+                    max = sLen;
                 }
             }
         }
-        return s.substring(start, start + max);
+        return s.substring(start, max + start);
+    }
+
+
+    /**
+     * 中心扩散
+     */
+    public static String longestPalindrome2(String s) {
+        if (s == null || "".equals(s)) {
+            return "";
+        }
+        char[] chars = s.toCharArray();
+        // 遍历，分别以遍历到的值向两边扩散
+        int start = 0, end = 0;
+        for (int i = 0; i < chars.length; i++) {
+            int i1 = explanAround(i, i, chars);
+            int i2 = explanAround(i, i + 1, chars);
+            int max = Math.max(i1, i2);
+            if (max > end - start + 1) {
+                // a b a
+                // 0 1 2
+                // a b b a
+                // 0 1 2 3
+                start = i - (max - 1) / 2;
+                end = i + max / 2;
+            }
+        }
+        return s.substring(start, end + 1);
+    }
+
+    private static int explanAround(int l, int r, char[] chars) {
+        while (l >= 0 && r < chars.length && chars[l] == chars[r]) {
+            l--;
+            r++;
+        }
+        return r - l + 1;
     }
 }
