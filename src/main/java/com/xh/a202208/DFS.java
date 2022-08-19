@@ -458,10 +458,45 @@ public class DFS {
             }
         }
         // 如果全部入队 即有结果
-        if (ct == numCourses){
+        if (ct == numCourses) {
             return res;
         }
         return new int[0];
     }
+
+    //https://leetcode.cn/problems/paths-with-sum-lcci/
+    int ct = 0;
+
+    public int pathSum(TreeNode root, int sum) {
+        if (root == null) {
+            return 0;
+        }
+
+
+        return ct;
+    }
+
+    public void pathSum2(TreeNode root, int sum) {
+        LinkedList<TreeNode> linkedList = new LinkedList<>();
+        TreeNode node = root;
+        int s = 0;
+        while (!linkedList.isEmpty() || node != null && s <= sum) {
+            while (node != null && s <= sum) {
+                linkedList.push(node);
+                s += node.val;
+                if (s == sum) {
+                    ct++;
+                }
+                node = node.left;
+            }
+            TreeNode pop = linkedList.pop();
+            s -= pop.val;
+            if (s == sum) {
+                ct++;
+            }
+            node = pop.right;
+        }
+    }
+
 
 }
