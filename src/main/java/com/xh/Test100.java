@@ -143,6 +143,43 @@ public class Test100 {
     }
 
 
+    //https://leetcode.cn/problems/shuffle-the-array/
+    public int[] shuffle(int[] nums, int n) {
+        int[] nums1 = new int[nums.length];
+        for (int i = 0; i < n; i++) {
+            nums1[2 * i] = nums[i];
+            nums1[2 * i + 1] = nums[n + i];
+        }
+        return nums1;
+    }
+
+    //https://leetcode.cn/problems/maximum-binary-tree/
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        int i = maxIndexOfArr(nums);
+        TreeNode node = new TreeNode(nums[i]);
+        int[] newNum = Arrays.copyOfRange(nums, 0, i);
+        int[] newNum2 = Arrays.copyOfRange(nums, i + 1, nums.length);
+        if (newNum.length > 0) {
+            node.left = constructMaximumBinaryTree(newNum);
+        }
+        if (newNum2.length > 0) {
+            node.right = constructMaximumBinaryTree(newNum2);
+        }
+        return node;
+    }
+
+    private int maxIndexOfArr(int[] nums) {
+        int max = -1, idx = -1;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > max) {
+                idx = i;
+                max = nums[i];
+            }
+        }
+        return idx;
+    }
+
+
     public static void main(String[] args) {
     }
 
