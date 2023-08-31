@@ -19,41 +19,54 @@ public class Print100_3 {
 
 
     public static void main(String[] args) {
-        new Thread(() -> {
-            for (int i = 0; i <= 100; i += 2) {
-                lock.lock();
-                try {
-                    condition.signal();
-                    System.out.println("A -> "+i);
-                    if ( i!= 100) {
-                        condition.await();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    lock.unlock();
-                }
-            }
-        }).start();
+//        new Thread(() -> {
+//            for (int i = 0; i <= 100; i += 2) {
+//                lock.lock();
+//                try {
+//                    condition.signal();
+//                    System.out.println("A -> "+i);
+//                    if ( i!= 100) {
+//                        condition.await();
+//                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                } finally {
+//                    lock.unlock();
+//                }
+//            }
+//        }).start();
+//
+//        new Thread(() -> {
+//            for (int i = 1; i <= 100; i += 2) {
+//                lock.lock();
+//                try {
+//                    condition.signal();
+//                    System.out.println("B -> "+i);
+//                    if (i != 99) {
+//                        condition.await();
+//                    }
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                } finally {
+//                    lock.unlock();
+//
+//                }
+//            }
+//        }).start();
 
-        new Thread(() -> {
-            for (int i = 1; i <= 100; i += 2) {
-                lock.lock();
-                try {
-                    condition.signal();
-                    System.out.println("B -> "+i);
-                    if (i != 99) {
-                        condition.await();
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } finally {
-                    lock.unlock();
+        System.out.println("gcd(14,18) = " + gcd(22, 15));
 
-                }
-            }
-        }).start();
+
+
     }
 
+
+    private static int gcd(int a, int b)
+    {
+        if(b == 0) {
+            return a;
+        }
+        return gcd(b, a % b);
+    }
 
 }
