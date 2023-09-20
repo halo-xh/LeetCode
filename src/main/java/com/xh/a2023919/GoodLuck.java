@@ -2,6 +2,8 @@ package com.xh.a2023919;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -9,10 +11,6 @@ import java.util.List;
  * @since 2023-09-19
  */
 public class GoodLuck {
-
-    public static void main(String[] args) {
-
-    }
 
 
     //https://leetcode.cn/problems/hanota-lcci/
@@ -131,5 +129,142 @@ public class GoodLuck {
         return dp[0][n - 1];
     }
 
+    //https://leetcode.cn/problems/TVdhkn/
+    public static List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<>();
+        ans.add(new ArrayList<>());
+        for (int num : nums) {
+            int size = ans.size();
+            for (int j = 0; j < size; j++) {
+                List<Integer> integers = new ArrayList<>(ans.get(j));
+                integers.add(num);
+                ans.add(integers);
+            }
+        }
+        return ans;
+    }
+
+    public List<List<Integer>> subsetss(int[] nums) {
+        ArrayList<List<Integer>> res = new ArrayList<>();
+        dfsSubsets(nums, 0, res, new LinkedList<Integer>());
+        return res;
+    }
+
+    private void dfsSubsets(int[] nums, int i, ArrayList<List<Integer>> res, LinkedList<Integer> cur) {
+        res.add(new ArrayList<>(cur));
+        for (int j = i; j < nums.length; j++) {
+            cur.addLast(nums[j]);
+            dfsSubsets(nums, j + 1, res, cur);
+            cur.removeLast();
+        }
+    }
+
+    //https://leetcode.cn/problems/subsets-ii/description/
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        Arrays.sort(nums);
+        ArrayList<List<Integer>> res = new ArrayList<>();
+        dfsSubsets2(nums, 0, res, new LinkedList<Integer>());
+        return res;
+    }
+
+    private void dfsSubsets2(int[] nums, int i, ArrayList<List<Integer>> res, LinkedList<Integer> cur) {
+        res.add(new ArrayList<>(cur));
+        for (int j = i; j < nums.length; j++) {
+            if (j > i && nums[j - 1] == nums[j]) {
+                continue;
+            }
+            cur.addLast(nums[j]);
+            dfsSubsets2(nums, j + 1, res, cur);
+            cur.removeLast();
+        }
+    }
+
+
+    //https://leetcode.cn/problems/Ygoe9J/
+    public static List<List<Integer>> combinationSum(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        ArrayList<List<Integer>> res = new ArrayList<>();
+        combinationSum(candidates, 0, 0, target, res, new LinkedList<Integer>());
+        return res;
+    }
+
+    private static void combinationSum(int[] nums, int i, int sum, int target, ArrayList<List<Integer>> res, LinkedList<Integer> cur) {
+        if (sum > target) {
+            return;
+        }
+        if (sum == target) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int j = i; j < nums.length; j++) {
+            if (sum + nums[j] > target) {
+                return;
+            }
+            sum += nums[j];
+            cur.addLast(nums[j]);
+            combinationSum(nums, j, sum, target, res, cur);
+            sum -= nums[j];
+            cur.removeLast();
+        }
+    }
+
+
+    //https://leetcode.cn/problems/VvJkup/
+    public static List<List<Integer>> permute(int[] nums) {
+        ArrayList<List<Integer>> res = new ArrayList<>();
+        permute(nums, res, new LinkedList<>());
+        return res;
+    }
+
+
+    public static void permute(int[] nums, ArrayList<List<Integer>> res, LinkedList<Integer> cur) {
+        if (cur.size() == nums.length) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int num : nums) {
+            if (cur.contains(num)) {
+                continue;
+            }
+            cur.addLast(num);
+            permute(nums, res, cur);
+            cur.removeLast();
+        }
+    }
+
+    //https://leetcode.cn/problems/7p8L0Z/
+    public static List<List<Integer>> permuteUnique(int[] nums) {
+        ArrayList<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(nums);
+        int[] used = new int[nums.length];
+        permuteUnique(nums, res, new LinkedList<>(), used);
+        return res;
+    }
+
+    public static void permuteUnique(int[] nums, ArrayList<List<Integer>> res, LinkedList<Integer> cur, int[] used) {
+        if (cur.size() == nums.length) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (used[i] == 1) {
+                continue;
+            }
+            if (i > 0 && nums[i] == nums[i - 1] && used[i - 1] == 0) {
+                continue;
+            }
+            cur.addLast(nums[i]);
+            used[i] = 1;
+            permuteUnique(nums, res, cur, used);
+            cur.removeLast();
+            used[i] = 0;
+        }
+    }
+
+
+    public static void main(String[] args) {
+        List<List<Integer>> lists = permuteUnique(new int[]{1, 1, 2, 3});
+        System.out.println("lists = " + lists);
+    }
 
 }
