@@ -2,9 +2,11 @@ package com.xh.a2023919;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Xiao Hong
@@ -262,9 +264,108 @@ public class GoodLuck {
     }
 
 
+    //https://leetcode.cn/problems/M99OJA/
+    public static String[][] partition(String s) {
+        ArrayList<List<String>> res = new ArrayList<>();
+        partition(s, 0, res, new LinkedList<>());
+        List<String[]> collect = res.stream().map(a -> a.toArray(new String[0])).collect(Collectors.toList());
+        return collect.toArray(new String[0][0]);
+    }
+
+    public static void partition(String s, int i, ArrayList<List<String>> res, LinkedList<String> cur) {
+        if (i == s.length()) {
+            res.add(new ArrayList<>(cur));
+            return;
+        }
+        for (int j = i; j < s.length(); j++) {
+            String substring = s.substring(i, j + 1);
+            if (isHuiWen(substring)) {
+                cur.addLast(substring);
+                partition(s, j + 1, res, cur);
+                cur.removeLast();
+            }
+        }
+    }
+
+    static HashMap<String, Boolean> map = new HashMap<>();
+
+    private static boolean isHuiWen(String substring) {
+        if (map.containsKey(substring)) {
+            return map.get(substring);
+        }
+        for (int i = 0; i < substring.length(); i++) {
+            if (substring.charAt(i) != substring.charAt(substring.length() - i - 1)) {
+                map.put(substring, false);
+                return false;
+            }
+        }
+        map.put(substring, true);
+        return true;
+    }
+
+    // https://leetcode.cn/problems/omKAoA/
+
+    static int minCut = Integer.MAX_VALUE;
+
+    public static int minCut(String s) {
+        partition2(s, 0, new LinkedList<>());
+        return minCut;
+    }
+
+
+    public static void partition2(String s, int i, LinkedList<String> cur) {
+        if (cur.size() - 1 > minCut) {
+            return;
+        }
+        if (i == s.length()) {
+            minCut = Math.min(minCut, cur.size() - 1);
+            return;
+        }
+        for (int j = i; j < s.length(); j++) {
+            String substring = s.substring(i, j + 1);
+            if (isHuiWen(substring)) {
+                cur.addLast(substring);
+                partition2(s, j + 1, cur);
+                cur.removeLast();
+            }
+        }
+    }
+
+
+    //https://leetcode.cn/problems/ZL6zAn/description/
+    public int maxAreaOfIsland(int[][] grid) {
+        int ans = 0;
+        for (int j = 0; j < grid.length; j++) {
+            for (int i = 0; i < grid[0].length; i++) {
+                ans = Math.max(ans, maxAreaOfIslandDfs(ans, grid, j, i));
+            }
+        }
+        return ans;
+    }
+
+    private int maxAreaOfIslandDfs(int ans, int[][] grid, int j, int i) {
+        if (i < 0 || j < 0 || j == grid.length || i == grid[0].length || grid[j][i] == 0) {
+            return 0;
+        }
+        grid[j][i] = 0;
+        int ct = 1;
+        ct += maxAreaOfIslandDfs(ct, grid, j - 1, i);
+        ct += maxAreaOfIslandDfs(ct, grid, j + 1, i);
+        ct += maxAreaOfIslandDfs(ct, grid, j, i - 1);
+        ct += maxAreaOfIslandDfs(ct, grid, j, i + 1);
+        return ct;
+    }
+
+    //https://leetcode.cn/problems/word-search/
+    public boolean exist(char[][] board, String word) {
+        return false;
+    }
+
+
     public static void main(String[] args) {
-        List<List<Integer>> lists = permuteUnique(new int[]{1, 1, 2, 3});
-        System.out.println("lists = " + lists);
+        String a = "ab";
+        int i = minCut(a);
+        System.out.println("i = " + i);
     }
 
 }
