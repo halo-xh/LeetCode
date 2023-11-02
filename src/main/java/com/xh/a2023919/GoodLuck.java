@@ -361,11 +361,65 @@ public class GoodLuck {
         return false;
     }
 
+    public static int gcd(int a, int b) {
+        int r;
+        while (b > 0) {
+            r = a % b;
+            a = b;
+            b = r;
+        }
+        return a;
+    }
+
+    public static int minOperations(int[] nums, int[] numsDivide) {
+        int i = numsDivide[0];
+        for (int j : numsDivide) {
+            i = gcd(i, j);
+        }
+        Arrays.sort(nums);
+        for (int k = 0; k < nums.length; k++) {
+            if (i % nums[k] == 0) {
+                return k;
+            }
+        }
+        return -1;
+    }
+
+    public static int countPoints(String rings) {
+        int[] res = new int[100];
+        int ans = 0;
+        for (int i = 0; i < rings.length() - 1; i++) {
+            char color = rings.charAt(i);
+            int idx = rings.charAt(++i) - 48;
+            if (color == 'R') {
+                res[idx] |= 1;
+            } else if (color == 'G') {
+                res[idx] |= 2;
+            } else if (color == 'B') {
+                res[idx] |= 4;
+            }
+        }
+        for (int re : res) {
+            if (re == 7) {
+                ans++;
+            }
+        }
+        return ans;
+    }
+
 
     public static void main(String[] args) {
-        String a = "ab";
-        int i = minCut(a);
+        int i = minOperations(new int[0], new int[]{2, 6, 4});
         System.out.println("i = " + i);
+
+        int b0R0G0R9R0B0G0 = countPoints("B0R0G0R9R0B0G0");
+        System.out.println(b0R0G0R9R0B0G0);
+
+        char a0 = '0';
+        char a1 = '1';
+        int i1 = a1 - 48;
+        System.out.println("i1 = " + i1);
+
     }
 
 }
