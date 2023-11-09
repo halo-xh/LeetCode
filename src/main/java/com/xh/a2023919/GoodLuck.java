@@ -407,18 +407,57 @@ public class GoodLuck {
         return ans;
     }
 
+    //https://leetcode.cn/problems/rotate-array/?envType=study-plan-v2&envId=top-interview-150
+    public static int[] rotate(int[] nums, int k) {
+        reverse(nums, 0, nums.length - 1);
+        reverse(nums, 0, k);
+        reverse(nums, k, nums.length - 1);
+        return nums;
+    }
 
+    public static void reverse(int[] nums, int start, int end) {
+        while (start < end) {
+            int temp = nums[start];
+            nums[start] = nums[end];
+            nums[end] = temp;
+            start++;
+            end--;
+        }
+    }
+
+
+    //https://leetcode.cn/problems/jump-game/description/?envType=study-plan-v2&envId=top-interview-150
+    public static boolean canJump(int[] nums) {
+        int k = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (i > k) {
+                return false;
+            }
+            k = Math.max(k, i + nums[i]);
+        }
+        return true;
+    }
+
+    public int hIndex(int[] citations) {
+        Arrays.sort(citations);
+        int res = 1;
+        int count = 0;
+        for (int i = citations.length - 1; i >= 0; i--) {
+            count++;
+            if (count >= citations[i]) {
+                return Math.min(res, citations[i]);
+            }
+        }
+        return res;
+    }
+
+
+    //1,2,3,4,5,6,7
+    //5,6,7,1,2,3,4
     public static void main(String[] args) {
-        int i = minOperations(new int[0], new int[]{2, 6, 4});
-        System.out.println("i = " + i);
 
-        int b0R0G0R9R0B0G0 = countPoints("B0R0G0R9R0B0G0");
-        System.out.println(b0R0G0R9R0B0G0);
-
-        char a0 = '0';
-        char a1 = '1';
-        int i1 = a1 - 48;
-        System.out.println("i1 = " + i1);
+        boolean b = canJump(new int[]{1, 1, 1, 0});
+        System.out.println("b = " + b);
 
     }
 
